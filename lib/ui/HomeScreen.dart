@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
     "Gift",
     "Savings",
     "Investment",
+    "Assets",
   };
 
   @override
