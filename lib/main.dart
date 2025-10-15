@@ -1,3 +1,4 @@
+import 'package:finly/ui/DetailsScreen.dart';
 import 'package:finly/ui/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: HomeScreen(),
+      initialRoute: "/home",
+      routes: {
+        '/home': (context) => HomeScreen(),
+        '/details': (context) => DetailsScreen(),
+      },
     );
   }
 }
