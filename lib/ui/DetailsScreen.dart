@@ -1,8 +1,16 @@
+import 'package:finly/controller/detailsConotroller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+  DetailsScreen({super.key});
+
+  TextEditingController amountController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  DetailsController detailsController = Get.put(DetailsController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +34,25 @@ class DetailsScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SizedBox(height: 40,),
-              Text(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 40,
+            ),
+            Center(
+              child: Text(
                 'Your total outstanding amount',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[550],
                 ),
               ),
-              Text(
+            ),
+            Center(
+              child: Text(
                 'Rs. 4658',
                 style: TextStyle(
                   fontSize: 30,
@@ -47,26 +60,174 @@ class DetailsScreen extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 40,),
-              Text(
-                'Amount',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Text(
+              'Amount',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            TextField(
+              controller: amountController,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      12,
+                    ),
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      12,
+                    ),
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                hintText: 'Enter spent amount',
+                fillColor: Colors.grey[300],
+                filled: true,
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Description',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            TextField(
+              controller: descriptionController,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      12,
+                    ),
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      12,
+                    ),
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                hintText: 'Enter Description',
+                fillColor: Colors.grey[300],
+                filled: true,
+              ),
+              keyboardType: TextInputType.text,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Date',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            TextField(
+              onTap: () {
+                _selectDate(context);
+              },
+              controller: dateController,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      12,
+                    ),
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      12,
+                    ),
+                  ),
+                  borderSide: BorderSide.none,
+                ),
+                prefixIcon: Icon(Icons.calendar_month),
+                hintText: 'DD-MM-YYYY',
+                fillColor: Colors.grey[300],
+                filled: true,
+              ),
+            ),
+            Spacer(
+              flex: 1,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.height,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(
+                        12,
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: () {},
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
                 ),
               ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Amount",
-                  hintText: 'Enter spent amount',
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
+  }
+
+  //TODO : need to improve date picker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      initialDate: detailsController.selectedDate ?? DateTime.now(),
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != detailsController.selectedDate) {
+      detailsController.selectedDate = picked;
+      dateController.text =
+          detailsController.selectedDate!.toIso8601String();
+    }
   }
 }
