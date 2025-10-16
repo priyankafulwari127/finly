@@ -55,7 +55,9 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.deepPurple,
         backgroundColor: Colors.deepPurple,
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed('/addCategory');
+        },
         child: Icon(
           Icons.add,
           color: Colors.white,
