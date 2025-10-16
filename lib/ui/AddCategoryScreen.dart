@@ -1,30 +1,42 @@
-import 'package:finly/controller/detailsConotroller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
 
-class DetailsScreen extends StatelessWidget {
-  DetailsScreen({super.key});
+class AddCategory extends StatelessWidget {
+  AddCategory({super.key});
 
-  TextEditingController amountController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  DetailsController detailsController = Get.put(DetailsController());
+  TextEditingController nameController = TextEditingController();
+
+  var icons = {
+    CupertinoIcons.doc_text,
+    CupertinoIcons.music_note_2,
+    CupertinoIcons.train_style_one,
+    CupertinoIcons.play_circle,
+    CupertinoIcons.antenna_radiowaves_left_right,
+    CupertinoIcons.shopping_cart,
+    CupertinoIcons.creditcard,
+    CupertinoIcons.money_dollar,
+    CupertinoIcons.heart,
+    CupertinoIcons.gift,
+    CupertinoIcons.money_euro,
+    CupertinoIcons.money_dollar_circle,
+    CupertinoIcons.money_dollar_circle_fill,
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Details",
+          'Add Category',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
         leading: IconButton(
           onPressed: () {
             Get.back();
@@ -34,43 +46,16 @@ class DetailsScreen extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 40,
-            ),
-            Center(
-              child: Text(
-                'Your total outstanding amount',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[550],
-                ),
-              ),
-            ),
-            Center(
-              child: Text(
-                'Rs. 4658',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
             Text(
-              'Amount',
+              'Category Name',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 color: Colors.black,
               ),
             ),
@@ -78,7 +63,7 @@ class DetailsScreen extends StatelessWidget {
               height: 5,
             ),
             TextField(
-              controller: amountController,
+              controller: nameController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 focusedBorder: OutlineInputBorder(
@@ -97,7 +82,7 @@ class DetailsScreen extends StatelessWidget {
                   ),
                   borderSide: BorderSide.none,
                 ),
-                hintText: 'Enter spent amount',
+                hintText: 'Enter category name',
                 fillColor: Colors.grey[300],
                 filled: true,
               ),
@@ -107,83 +92,64 @@ class DetailsScreen extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Description',
-              textAlign: TextAlign.left,
+              'Category Icon',
               style: TextStyle(
-                fontSize: 16,
                 color: Colors.black,
+                fontSize: 16,
               ),
             ),
             SizedBox(
               height: 5,
             ),
-            TextField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      12,
-                    ),
-                  ),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      12,
-                    ),
-                  ),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: 'Enter Description',
-                fillColor: Colors.grey[300],
-                filled: true,
-              ),
-              keyboardType: TextInputType.text,
-            ),
             SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Date',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextField(
-              onTap: () {
-                _selectDate(context);
-              },
-              controller: dateController,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: OutlineInputBorder(
+              height: 185,
+              width: MediaQuery.of(context).size.height,
+              child: Card(
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(
                       12,
                     ),
                   ),
-                  borderSide: BorderSide.none,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      12,
+                elevation: 5,
+                child: Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.builder(
+                      itemCount: icons.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        childAspectRatio: 1.1,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  12,
+                                ),
+                              ),
+                            ),
+                            color: Colors.grey[350],
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                icons.elementAt(
+                                  index,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  borderSide: BorderSide.none,
                 ),
-                prefixIcon: Icon(Icons.calendar_month),
-                hintText: 'DD-MM-YYYY',
-                fillColor: Colors.grey[300],
-                filled: true,
               ),
             ),
             SizedBox(
@@ -228,7 +194,6 @@ class DetailsScreen extends StatelessWidget {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.height,
-              height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
@@ -242,7 +207,7 @@ class DetailsScreen extends StatelessWidget {
                 ),
                 onPressed: () {},
                 child: Text(
-                  'Save',
+                  'Create',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -254,19 +219,5 @@ class DetailsScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      initialDate: detailsController.selectedDate ?? DateTime.now(),
-      context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null && picked != detailsController.selectedDate) {
-      final formattedDate = DateFormat("dd-MM-yyyy").format(picked);
-      dateController.text = formattedDate;
-      detailsController.selectedDate = picked;
-    }
   }
 }

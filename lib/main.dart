@@ -1,3 +1,4 @@
+import 'package:finly/ui/AddCategoryScreen.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:finly/ui/HomeScreen.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => HomeScreen(),
         '/details': (context) => DetailsScreen(),
+        '/addCategory': (context) => AddCategory(),
       },
     );
   }
