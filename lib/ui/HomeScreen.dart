@@ -1,6 +1,8 @@
+import 'package:finly/ui/DetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -75,8 +77,18 @@ class HomeScreen extends StatelessWidget {
           itemCount: categories.length,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: () {
-                Get.toNamed('/details');
+              onTap: () async {
+                //saves the clicked category
+                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                sharedPreferences.setString(
+                  'selected_category',
+                  categories.elementAt(index),
+                );
+                Get.to(
+                  DetailsScreen(
+                    categoryName: categories.elementAt(index),
+                  ),
+                );
               },
               child: Card(
                 elevation: 5,

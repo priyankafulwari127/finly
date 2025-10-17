@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailsScreen extends StatelessWidget {
-  DetailsScreen({super.key});
+  final String categoryName;
+
+  DetailsScreen({super.key, required this.categoryName});
 
   TextEditingController amountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController dateController = TextEditingController();
+  TextEditingController budgetController = TextEditingController();
   DetailsController detailsController = Get.put(DetailsController());
 
   @override
@@ -18,7 +22,7 @@ class DetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Details",
+          categoryName,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -54,16 +58,18 @@ class DetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Center(
-              child: Text(
-                'Rs. 4658',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+            Obx(() {
+              return Center(
+                child: Text(
+                  "${detailsController.totalAmount.value}",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
             SizedBox(
               height: 40,
             ),
@@ -78,6 +84,19 @@ class DetailsScreen extends StatelessWidget {
               height: 5,
             ),
             TextField(
+              onChanged: (value) async {
+                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                sharedPreferences.getString('totalAmount');
+                double amount = double.tryParse(value) ?? 0.0;
+                if (amount > detailsController.budgetAmount.value) {
+                  Get.snackbar(
+                    'Error',
+                    'Your amount is higher than your monthly budget',
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                }
+              },
               controller: amountController,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -200,6 +219,17 @@ class DetailsScreen extends StatelessWidget {
               height: 5,
             ),
             TextField(
+              controller: budgetController,
+              onChanged: (value) async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                double budget = double.tryParse(value) ?? 0.0;
+                prefs.setDouble('budget', budget);
+                detailsController.budgetAmount.value = budget;
+              },
+              // onChanged: (value) async {
+              //   SharedPreferences prefs = await SharedPreferences.getInstance();
+              //   prefs.getDouble('budget');
+              // },
               decoration: InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: OutlineInputBorder(
@@ -222,6 +252,7 @@ class DetailsScreen extends StatelessWidget {
                 fillColor: Colors.grey[300],
                 filled: true,
               ),
+              keyboardType: TextInputType.number,
             ),
             Spacer(
               flex: 1,
@@ -240,7 +271,27 @@ class DetailsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  double enteredAmount = double.tryParse(amountController.text) ?? 0.0;
+                  if (amountController.text.isEmpty) {
+                    Get.snackbar('Error', 'Please enter amount');
+                  } else if (dateController.text.isEmpty) {
+                    Get.snackbar('Error', 'Please select date');
+                  } else if (budgetController.text.isEmpty) {
+                    Get.snackbar('Error', 'Please enter budget');
+                  } else if (enteredAmount >= detailsController.budgetAmount.value) {
+                    Get.snackbar('Error', 'Spent amount is greater than budget');
+                  } else {
+                    if (enteredAmount <= detailsController.budgetAmount.value) {
+                      var addedAmount = detailsController.totalAmount.value + enteredAmount;
+                      detailsController.totalAmount.value = addedAmount;
+                    }
+                    prefs.setString('totalAmount', detailsController.totalAmount.value.toString());
+                    Get.snackbar('Success', "Your spent is saved");
+                    Get.back();
+                  }
+                },
                 child: Text(
                   'Save',
                   style: TextStyle(
