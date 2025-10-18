@@ -1,8 +1,6 @@
 import 'package:finly/controller/detailsConotroller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,7 +13,9 @@ class DetailsScreen extends StatelessWidget {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
+
   DetailsController detailsController = Get.put(DetailsController());
+  var isAmountAdded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -226,10 +226,6 @@ class DetailsScreen extends StatelessWidget {
                 prefs.setDouble('budget', budget);
                 detailsController.budgetAmount.value = budget;
               },
-              // onChanged: (value) async {
-              //   SharedPreferences prefs = await SharedPreferences.getInstance();
-              //   prefs.getDouble('budget');
-              // },
               decoration: InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: OutlineInputBorder(
