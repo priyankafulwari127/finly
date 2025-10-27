@@ -1,3 +1,4 @@
+import 'package:finly/model/Category.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,21 +8,63 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  var categories = {
-    "Bills",
-    "Entertainment",
-    "Travel",
-    "Food",
-    "Utilities",
-    "Shopping",
-    "Credit Management",
-    "Accounts Management",
-    "Health & Medicine",
-    "Gift",
-    "Savings",
-    "Investment",
-    "Assets",
-  };
+  List<Category> categories = [
+    Category(
+      categoryName: 'Bills',
+      totalAmount: '0',
+      id: '1',
+    ),
+    Category(
+      categoryName: 'Entertainment',
+      totalAmount: '0',
+      id: '2',
+    ),
+    Category(
+      categoryName: 'Travel',
+      totalAmount: '0',
+      id: '3',
+    ),
+    Category(
+      categoryName: 'Food',
+      totalAmount: '0',
+      id: '4',
+    ),
+    Category(
+      categoryName: 'Marriage',
+      totalAmount: '0',
+      id: '5',
+    ),
+    Category(
+      categoryName: 'Shopping',
+      totalAmount: '0',
+      id: '6',
+    ),
+    Category(
+      categoryName: 'Savings',
+      totalAmount: '0',
+      id: '7',
+    ),
+    Category(
+      categoryName: 'Investment',
+      totalAmount: '0',
+      id: '8',
+    ),
+    Category(
+      categoryName: 'Health & Medicines',
+      totalAmount: '0',
+      id: '9',
+    ),
+    Category(
+      categoryName: 'Accounts Management',
+      totalAmount: '0',
+      id: '10',
+    ),
+    Category(
+      categoryName: 'Credit Card Management',
+      totalAmount: '0',
+      id: '11',
+    ),
+  ];
 
   var icons = {
     CupertinoIcons.doc_text,
@@ -82,11 +125,11 @@ class HomeScreen extends StatelessWidget {
                 SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                 sharedPreferences.setString(
                   'selected_category',
-                  categories.elementAt(index),
+                  categories.elementAt(index).categoryName,
                 );
                 Get.to(
                   DetailsScreen(
-                    categoryName: categories.elementAt(index),
+                    categoryName: categories.elementAt(index).categoryName,
                   ),
                 );
               },
@@ -112,7 +155,7 @@ class HomeScreen extends StatelessWidget {
                         height: 4,
                       ),
                       Text(
-                        categories.elementAt(index),
+                        categories.elementAt(index).categoryName,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
