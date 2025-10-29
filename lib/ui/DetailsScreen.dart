@@ -21,11 +21,11 @@ class DetailsScreen extends StatelessWidget {
   TextEditingController budgetController = TextEditingController();
 
   CategoryController categoryController = Get.put(CategoryController());
-  CategoryList categoryList = CategoryList();
+  // CategoryList categoryList = CategoryList();
 
   @override
   Widget build(BuildContext context) {
-    var category = categoryList.categories.firstWhereOrNull((cat) => cat.id == id);
+    var category = categoryController.categoryList.value.firstWhereOrNull((cat) => cat.id == id);
 
     return Scaffold(
       appBar: AppBar(
@@ -232,7 +232,8 @@ class DetailsScreen extends StatelessWidget {
                     onChanged: (value) async {
                       SharedPreferences prefs = await SharedPreferences.getInstance();
                       double budget = double.tryParse(value) ?? 0.0;
-                      prefs.setDouble('budget', budget);
+                      // prefs.setDouble('budget', budget);
+                      categoryController.saveCategory();
                       category?.budgetAmount = budget;
                     },
                     decoration: InputDecoration(
@@ -253,7 +254,7 @@ class DetailsScreen extends StatelessWidget {
                         ),
                         borderSide: BorderSide.none,
                       ),
-                      // hintText: 'Enter monthly budget',
+                      hintText: category?.budgetAmount != 0 ? category?.budgetAmount.toString() : 'Enter monthly budget',
                       fillColor: Colors.grey[300],
                       filled: true,
                     ),
@@ -294,7 +295,8 @@ class DetailsScreen extends StatelessWidget {
                           var addedAmount = category.totalAmount + enteredAmount;
                           category.totalAmount = addedAmount;
                           // }
-                          prefs.setDouble('totalAmount', category.totalAmount);
+                          // prefs.setDouble('totalAmount', category.totalAmount);
+                          categoryController.saveCategory();
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();
                           descriptionController.clear();
@@ -327,7 +329,7 @@ class DetailsScreen extends StatelessWidget {
       final formattedDate = DateFormat("dd-MM-yyyy").format(picked);
       dateController.text = formattedDate;
       categoryController.selectedDate = picked;
-      var categoryDate = categoryList.categories.firstWhereOrNull((cat) => cat.id == id);
+      var categoryDate = categoryController.categoryList.value.firstWhereOrNull((cat) => cat.id == id);
       categoryDate?.date = picked;
     }
   }

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import '../model/Category.dart';
 
 class CategoryList {
-  List<Category> categories = [
+  RxList<Category> categories = [
     Category(
       categoryName: 'Bills',
       totalAmount: 0.0,
@@ -59,7 +60,8 @@ class CategoryList {
       totalAmount: 0.0,
       id: '11',
     ),
-  ];
+  ].obs;
+
   var icons = {
     CupertinoIcons.doc_text,
     CupertinoIcons.music_note_2,
