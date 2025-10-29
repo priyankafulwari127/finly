@@ -1,3 +1,5 @@
+import 'package:finly/controller/CategoryController.dart';
+import 'package:finly/data/CategoryList.dart';
 import 'package:finly/model/Category.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,79 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  List<Category> categories = [
-    Category(
-      categoryName: 'Bills',
-      totalAmount: '0',
-      id: '1',
-    ),
-    Category(
-      categoryName: 'Entertainment',
-      totalAmount: '0',
-      id: '2',
-    ),
-    Category(
-      categoryName: 'Travel',
-      totalAmount: '0',
-      id: '3',
-    ),
-    Category(
-      categoryName: 'Food',
-      totalAmount: '0',
-      id: '4',
-    ),
-    Category(
-      categoryName: 'Marriage',
-      totalAmount: '0',
-      id: '5',
-    ),
-    Category(
-      categoryName: 'Shopping',
-      totalAmount: '0',
-      id: '6',
-    ),
-    Category(
-      categoryName: 'Savings',
-      totalAmount: '0',
-      id: '7',
-    ),
-    Category(
-      categoryName: 'Investment',
-      totalAmount: '0',
-      id: '8',
-    ),
-    Category(
-      categoryName: 'Health & Medicines',
-      totalAmount: '0',
-      id: '9',
-    ),
-    Category(
-      categoryName: 'Accounts Management',
-      totalAmount: '0',
-      id: '10',
-    ),
-    Category(
-      categoryName: 'Credit Card Management',
-      totalAmount: '0',
-      id: '11',
-    ),
-  ];
-
-  var icons = {
-    CupertinoIcons.doc_text,
-    CupertinoIcons.music_note_2,
-    CupertinoIcons.train_style_one,
-    CupertinoIcons.play_circle,
-    CupertinoIcons.antenna_radiowaves_left_right,
-    CupertinoIcons.shopping_cart,
-    CupertinoIcons.creditcard,
-    CupertinoIcons.money_dollar,
-    CupertinoIcons.heart,
-    CupertinoIcons.gift,
-    CupertinoIcons.money_euro,
-    CupertinoIcons.money_dollar_circle,
-    CupertinoIcons.money_dollar_circle_fill,
-  };
+  CategoryList categoryList = CategoryList();
 
   @override
   Widget build(BuildContext context) {
@@ -117,19 +47,20 @@ class HomeScreen extends StatelessWidget {
             mainAxisSpacing: 8,
             childAspectRatio: 1.7,
           ),
-          itemCount: categories.length,
+          itemCount: categoryList.categories.length,
           itemBuilder: (BuildContext context, int index) {
+            // var category = categoryController.categoryList[index];
             return GestureDetector(
               onTap: () async {
                 //saves the clicked category
                 SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                sharedPreferences.setString(
-                  'selected_category',
-                  categories.elementAt(index).categoryName,
-                );
+                sharedPreferences.setString('selected_category', categoryList.categories.elementAt(index).categoryName);
+                sharedPreferences.setString('selected_category_id', categoryList.categories.elementAt(index).id);
+                //navigates to the clicked category
                 Get.to(
                   DetailsScreen(
-                    categoryName: categories.elementAt(index).categoryName,
+                    categoryName: categoryList.categories.elementAt(index).categoryName,
+                    id: categoryList.categories.elementAt(index).id,
                   ),
                 );
               },
@@ -148,14 +79,14 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.grey[350],
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(icons.elementAt(index)),
+                          child: Icon(categoryList.icons.elementAt(index)),
                         ),
                       ),
                       SizedBox(
                         height: 4,
                       ),
                       Text(
-                        categories.elementAt(index).categoryName,
+                        categoryList.categories.elementAt(index).categoryName,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,

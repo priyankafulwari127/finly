@@ -1,9 +1,9 @@
-import 'package:finly/ui/HomeScreen.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailsController extends GetxController{
   DateTime? selectedDate;
+  var isLoading = false.obs;
   var budgetAmount = 0.0.obs;
   var totalAmount = 0.0.obs;
 
