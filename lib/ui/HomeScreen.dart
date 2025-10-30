@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  CategoryList categoryList = CategoryList();
+  CategoryController categoryController = Get.put(CategoryController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +47,20 @@ class HomeScreen extends StatelessWidget {
             mainAxisSpacing: 8,
             childAspectRatio: 1.7,
           ),
-          itemCount: categoryList.categories.length,
+          itemCount: categoryController.categoryList.value.length,
           itemBuilder: (BuildContext context, int index) {
             // var category = categoryController.categoryList[index];
             return GestureDetector(
               onTap: () async {
                 //saves the clicked category
                 SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                sharedPreferences.setString('selected_category', categoryList.categories.elementAt(index).categoryName);
-                sharedPreferences.setString('selected_category_id', categoryList.categories.elementAt(index).id);
+                sharedPreferences.setString('selected_category', categoryController.categoryList.value.elementAt(index).categoryName);
+                sharedPreferences.setString('selected_category_id', categoryController.categoryList.value.elementAt(index).id);
                 //navigates to the clicked category
                 Get.to(
                   DetailsScreen(
-                    categoryName: categoryList.categories.elementAt(index).categoryName,
-                    id: categoryList.categories.elementAt(index).id,
+                    categoryName: categoryController.categoryList.value.elementAt(index).categoryName,
+                    id: categoryController.categoryList.value.elementAt(index).id,
                   ),
                 );
               },
@@ -79,14 +79,14 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.grey[350],
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(categoryList.icons.elementAt(index)),
+                          child: Icon(CategoryList().icons.elementAt(index)),
                         ),
                       ),
                       SizedBox(
                         height: 4,
                       ),
                       Text(
-                        categoryList.categories.elementAt(index).categoryName,
+                        categoryController.categoryList.value.elementAt(index).categoryName,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,

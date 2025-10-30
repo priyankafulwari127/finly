@@ -233,7 +233,7 @@ class DetailsScreen extends StatelessWidget {
                       SharedPreferences prefs = await SharedPreferences.getInstance();
                       double budget = double.tryParse(value) ?? 0.0;
                       // prefs.setDouble('budget', budget);
-                      categoryController.saveCategory();
+                      // categoryController.saveCategory();
                       category?.budgetAmount = budget;
                     },
                     decoration: InputDecoration(
@@ -292,11 +292,14 @@ class DetailsScreen extends StatelessWidget {
                           Get.snackbar('Error', 'Spent amount is greater than budget');
                         } else {
                           // if (enteredAmount <= budget) {
-                          var addedAmount = category.totalAmount + enteredAmount;
-                          category.totalAmount = addedAmount;
-                          // }
-                          // prefs.setDouble('totalAmount', category.totalAmount);
-                          categoryController.saveCategory();
+                          // var addedAmount = category.totalAmount + enteredAmount;
+                          // category.totalAmount = addedAmount;
+                          // // }
+                          // // prefs.setDouble('totalAmount', category.totalAmount);
+                          // categoryController.saveCategory();
+                          var newCategory = category;
+                          newCategory.totalAmount = newCategory.totalAmount + enteredAmount;
+                          categoryController.updateCategory(newCategory);
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();
                           descriptionController.clear();
