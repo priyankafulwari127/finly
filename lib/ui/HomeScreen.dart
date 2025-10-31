@@ -40,67 +40,68 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 1.7,
-          ),
-          itemCount: categoryController.categoryList.value.length,
-          itemBuilder: (BuildContext context, int index) {
-            // var category = categoryController.categoryList[index];
-            return GestureDetector(
-              onTap: () async {
-                //saves the clicked category
-                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                sharedPreferences.setString('selected_category', categoryController.categoryList.value.elementAt(index).categoryName);
-                sharedPreferences.setString('selected_category_id', categoryController.categoryList.value.elementAt(index).id);
-                //navigates to the clicked category
-                Get.to(
-                  DetailsScreen(
-                    categoryName: categoryController.categoryList.value.elementAt(index).categoryName,
-                    id: categoryController.categoryList.value.elementAt(index).id,
-                  ),
-                );
-              },
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+        child: categoryController.categoryList.isEmpty
+            ? Center(child: Text("No Category Found"))
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 1.7,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Card(
-                        elevation: 2,
-                        color: Colors.grey[350],
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(CategoryList().icons.elementAt(index)),
+                itemCount: categoryController.categoryList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () async {
+                      //saves the clicked category
+                      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                      sharedPreferences.setString('selected_category', categoryController.categoryList.elementAt(index).categoryName ?? '');
+                      sharedPreferences.setString('selected_category_id', categoryController.categoryList.elementAt(index).id ?? '');
+                      //navigates to the clicked category
+                      Get.to(
+                        DetailsScreen(
+                          categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
+                          id: categoryController.categoryList.elementAt(index).id ?? 'no id',
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Card(
+                              elevation: 2,
+                              color: Colors.grey[350],
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(CategoryList().icons.elementAt(index)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              categoryController.categoryList.elementAt(index).categoryName ?? '',
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        categoryController.categoryList.value.elementAt(index).categoryName,
-                        textAlign: TextAlign.left,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

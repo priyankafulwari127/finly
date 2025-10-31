@@ -1,3 +1,6 @@
+import 'package:finly/controller/CategoryController.dart';
+import 'package:finly/data/CategoryList.dart';
+import 'package:finly/model/Category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,22 +9,7 @@ class AddCategory extends StatelessWidget {
   AddCategory({super.key});
 
   TextEditingController nameController = TextEditingController();
-
-  var icons = {
-    CupertinoIcons.doc_text,
-    CupertinoIcons.music_note_2,
-    CupertinoIcons.train_style_one,
-    CupertinoIcons.play_circle,
-    CupertinoIcons.antenna_radiowaves_left_right,
-    CupertinoIcons.shopping_cart,
-    CupertinoIcons.creditcard,
-    CupertinoIcons.money_dollar,
-    CupertinoIcons.heart,
-    CupertinoIcons.gift,
-    CupertinoIcons.money_euro,
-    CupertinoIcons.money_dollar_circle,
-    CupertinoIcons.money_dollar_circle_fill,
-  };
+  TextEditingController budgetController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +105,7 @@ class AddCategory extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GridView.builder(
-                      itemCount: icons.length,
+                      itemCount: CategoryList().icons.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
                         crossAxisSpacing: 8,
@@ -139,9 +127,9 @@ class AddCategory extends StatelessWidget {
                             child: IconButton(
                               onPressed: () {},
                               icon: Icon(
-                                icons.elementAt(
-                                  index,
-                                ),
+                                CategoryList().icons.elementAt(
+                                      index,
+                                    ),
                               ),
                             ),
                           ),
@@ -166,6 +154,7 @@ class AddCategory extends StatelessWidget {
               height: 5,
             ),
             TextField(
+              controller: budgetController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: OutlineInputBorder(
@@ -205,7 +194,27 @@ class AddCategory extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  if (nameController.text.isEmpty) {
+                    Get.snackbar('Error', 'Please enter name');
+                  } else {
+                    double? budget = double.tryParse(budgetController.text) ?? 0.0;
+                    var category = Category(
+                      categoryName: nameController.text,
+                      budgetAmount: budget,
+                      totalAmount: 0.0,
+                      spentAmount: 0.0,
+                      description: '',
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      date: DateTime.now(),
+                    );
+                    await CategoryController().addCategory(category);
+                    await CategoryController().updateCategory(category);
+                    nameController.clear();
+                    budgetController.clear();
+                    Get.snackbar("Success", "Category has been added");
+                  }
+                },
                 child: Text(
                   'Create',
                   style: TextStyle(

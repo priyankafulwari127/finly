@@ -25,7 +25,7 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var category = categoryController.categoryList.value.firstWhereOrNull((cat) => cat.id == id);
+    var category = categoryController.categoryList.firstWhereOrNull((cat) => cat.id == id);
 
     return Scaffold(
       appBar: AppBar(
@@ -298,7 +298,7 @@ class DetailsScreen extends StatelessWidget {
                           // // prefs.setDouble('totalAmount', category.totalAmount);
                           // categoryController.saveCategory();
                           var newCategory = category;
-                          newCategory.totalAmount = newCategory.totalAmount + enteredAmount;
+                          newCategory.totalAmount = (newCategory.totalAmount! + enteredAmount);
                           categoryController.updateCategory(newCategory);
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();

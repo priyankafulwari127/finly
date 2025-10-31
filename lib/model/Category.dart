@@ -1,16 +1,16 @@
 class Category {
-  final String categoryName;
-  double totalAmount;
-  final String id;
+  String? categoryName;
+  double? totalAmount;
+  String? id;
   double? spentAmount;
-  final String? description;
+  String? description;
   DateTime? date;
   double? budgetAmount;
 
   Category({
-    required this.categoryName,
-    required this.totalAmount,
-    required this.id,
+    this.categoryName,
+    this.totalAmount,
+    this.id,
     this.spentAmount,
     this.budgetAmount,
     this.date,
