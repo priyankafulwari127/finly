@@ -19,7 +19,7 @@ class CategoryController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await categoryPrefs.loadCategory(this);
+    categoryList.value = await categoryPrefs.getCategories();
   }
 
   Future<void> addCategory(Category category) async {

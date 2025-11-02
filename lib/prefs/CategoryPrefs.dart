@@ -14,13 +14,14 @@ class CategoryPrefs{
     await prefs.setString(categoryKey, jsonEncode(categoryMaps));
   }
 
-  Future<void> loadCategory(CategoryController categoryController) async {
+  Future<List<Category>> getCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString(categoryKey);
     if (jsonString != null) {
-      categoryController.categoryList.value = (jsonDecode(jsonString) as List)
+       return (jsonDecode(jsonString) as List)
           .map((cat) => Category.fromJson(cat))
           .toList();
     }
+    return [];
   }
 }

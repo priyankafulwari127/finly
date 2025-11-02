@@ -4,7 +4,7 @@ class Category {
   String? id;
   double? spentAmount;
   String? description;
-  DateTime? date;
+  String? date;
   double? budgetAmount;
 
   Category({

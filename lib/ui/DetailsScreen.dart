@@ -333,7 +333,7 @@ class DetailsScreen extends StatelessWidget {
       dateController.text = formattedDate;
       categoryController.selectedDate = picked;
       var categoryDate = categoryController.categoryList.value.firstWhereOrNull((cat) => cat.id == id);
-      categoryDate?.date = picked;
+      categoryDate?.date = picked.toString();
     }
   }
 }

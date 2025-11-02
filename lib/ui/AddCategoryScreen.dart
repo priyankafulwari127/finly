@@ -10,6 +10,7 @@ class AddCategory extends StatelessWidget {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
+  CategoryController categoryController = Get.put(CategoryController());
 
   @override
   Widget build(BuildContext context) {
@@ -206,10 +207,10 @@ class AddCategory extends StatelessWidget {
                       spentAmount: 0.0,
                       description: '',
                       id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      date: DateTime.now(),
+                      date: DateTime.now().toString(),
                     );
-                    await CategoryController().addCategory(category);
-                    await CategoryController().updateCategory(category);
+                    await categoryController.addCategory(category);
+                    // await CategoryController().updateCategory(category);
                     nameController.clear();
                     budgetController.clear();
                     Get.snackbar("Success", "Category has been added");

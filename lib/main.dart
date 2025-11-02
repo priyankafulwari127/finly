@@ -1,4 +1,5 @@
 import 'package:finly/controller/CategoryController.dart';
+import 'package:finly/prefs/CategoryPrefs.dart';
 import 'package:finly/ui/AddCategoryScreen.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:finly/ui/HomeScreen.dart';
@@ -8,7 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() {
-  Get.put(CategoryController());
+  CategoryPrefs();
   runApp(const MyApp());
 }
 
