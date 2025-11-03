@@ -1,5 +1,5 @@
 import 'package:finly/controller/CategoryController.dart';
-import 'package:finly/data/CategoryList.dart';
+import 'package:finly/data/IconList.dart';
 import 'package:finly/model/Category.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   CategoryController categoryController = Get.put(CategoryController());
+  IconList iconList = IconList();
 
   @override
   Widget build(BuildContext context) {
@@ -55,31 +56,14 @@ class HomeScreen extends StatelessWidget {
                     return GestureDetector(
                       onTap: () async {
                         //saves the clicked category
-                        SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        sharedPreferences.setString(
-                            'selected_category',
-                            categoryController.categoryList
-                                    .elementAt(index)
-                                    .categoryName ??
-                                '');
-                        sharedPreferences.setString(
-                            'selected_category_id',
-                            categoryController.categoryList
-                                    .elementAt(index)
-                                    .id ??
-                                '');
+                        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                        sharedPreferences.setString('selected_category', categoryController.categoryList.elementAt(index).categoryName ?? '');
+                        sharedPreferences.setString('selected_category_id', categoryController.categoryList.elementAt(index).id ?? '');
                         //navigates to the clicked category
                         Get.to(
                           DetailsScreen(
-                            categoryName: categoryController.categoryList
-                                    .elementAt(index)
-                                    .categoryName ??
-                                'No Name',
-                            id: categoryController.categoryList
-                                    .elementAt(index)
-                                    .id ??
-                                'no id',
+                            categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
+                            id: categoryController.categoryList.elementAt(index).id ?? 'no id',
                           ),
                         );
                       },
@@ -98,18 +82,14 @@ class HomeScreen extends StatelessWidget {
                                 color: Colors.grey[350],
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                      CategoryList().icons.elementAt(index)),
+                                  child: Icon(iconList.icons.elementAt(index)),
                                 ),
                               ),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
-                                categoryController.categoryList
-                                        .elementAt(index)
-                                        .categoryName ??
-                                    '',
+                                categoryController.categoryList.elementAt(index).categoryName ?? '',
                                 textAlign: TextAlign.left,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,

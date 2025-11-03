@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:finly/data/CategoryList.dart';
+import 'package:finly/data/IconList.dart';
 import 'package:finly/prefs/CategoryPrefs.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +10,6 @@ import '../model/Category.dart';
 class CategoryController extends GetxController {
   CategoryPrefs categoryPrefs = CategoryPrefs();
 
-  // var categoryList = CategoryList().categories.obs;
   var categoryList = <Category>[].obs;
 
   DateTime? selectedDate;

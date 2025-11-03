@@ -1,9 +1,10 @@
 import 'package:finly/controller/CategoryController.dart';
-import 'package:finly/data/CategoryList.dart';
+import 'package:finly/data/IconList.dart';
 import 'package:finly/model/Category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddCategory extends StatelessWidget {
   AddCategory({super.key});
@@ -11,6 +12,7 @@ class AddCategory extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
   CategoryController categoryController = Get.put(CategoryController());
+  IconList iconList = IconList();
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +108,7 @@ class AddCategory extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GridView.builder(
-                      itemCount: CategoryList().icons.length,
+                      itemCount: iconList.icons.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
                         crossAxisSpacing: 8,
@@ -128,9 +130,7 @@ class AddCategory extends StatelessWidget {
                             child: IconButton(
                               onPressed: () {},
                               icon: Icon(
-                                CategoryList().icons.elementAt(
-                                      index,
-                                    ),
+                                iconList.icons.elementAt(index),
                               ),
                             ),
                           ),
@@ -214,6 +214,7 @@ class AddCategory extends StatelessWidget {
                     nameController.clear();
                     budgetController.clear();
                     Get.snackbar("Success", "Category has been added");
+                    Get.back();
                   }
                 },
                 child: Text(

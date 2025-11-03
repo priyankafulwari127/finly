@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:finly/controller/DetailsController.dart';
-import 'package:finly/data/CategoryList.dart';
+import 'package:finly/data/IconList.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
