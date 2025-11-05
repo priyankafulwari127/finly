@@ -1,4 +1,5 @@
 import 'package:finly/controller/CategoryController.dart';
+import 'package:finly/model/Category.dart';
 import 'package:finly/prefs/CategoryPrefs.dart';
 import 'package:finly/ui/AddCategoryScreen.dart';
 import 'package:finly/ui/DetailsScreen.dart';
@@ -7,8 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
+void main() async{
+  await Hive.initFlutter();
+  Hive.registerAdapter(CategoryAdapter());
+  Hive.openBox('category');
   runApp(const MyApp());
 }
 

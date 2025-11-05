@@ -1,0 +1,59 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'Category.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class CategoryAdapter extends TypeAdapter<Category> {
+  @override
+  final int typeId = 0;
+
+  @override
+  Category read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Category(
+      categoryName: fields[0] as String?,
+      totalAmount: fields[1] as double?,
+      id: fields[2] as String?,
+      spentAmount: fields[3] as double?,
+      budgetAmount: fields[6] as double?,
+      date: fields[5] as String?,
+      description: fields[4] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Category obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.categoryName)
+      ..writeByte(1)
+      ..write(obj.totalAmount)
+      ..writeByte(2)
+      ..write(obj.id)
+      ..writeByte(3)
+      ..write(obj.spentAmount)
+      ..writeByte(4)
+      ..write(obj.description)
+      ..writeByte(5)
+      ..write(obj.date)
+      ..writeByte(6)
+      ..write(obj.budgetAmount);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CategoryAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

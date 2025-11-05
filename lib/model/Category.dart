@@ -1,10 +1,21 @@
+import 'package:hive_flutter/adapters.dart';
+part 'Category.g.dart';
+
+@HiveType(typeId: 0)
 class Category {
+  @HiveField(0)
   String? categoryName;
+  @HiveField(1)
   double? totalAmount;
+  @HiveField(2)
   String? id;
+  @HiveField(3)
   double? spentAmount;
+  @HiveField(4)
   String? description;
+  @HiveField(5)
   String? date;
+  @HiveField(6)
   double? budgetAmount;
 
   Category({
