@@ -196,8 +196,11 @@ class AddCategory extends StatelessWidget {
                 onPressed: () async {
                   if (nameController.text.isEmpty) {
                     Get.snackbar('Error', 'Please enter name');
+                  } else if (budgetController.text.isEmpty) {
+                    Get.snackbar('Error', 'Please enter budget');
                   } else {
-                    double? budget = double.tryParse(budgetController.text) ?? 0.0;
+                    double? budget =
+                        double.tryParse(budgetController.text) ?? 0.0;
                     var category = Category(
                       categoryName: nameController.text,
                       budgetAmount: budget,
