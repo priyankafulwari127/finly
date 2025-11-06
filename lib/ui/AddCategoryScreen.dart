@@ -1,10 +1,8 @@
 import 'package:finly/controller/CategoryController.dart';
 import 'package:finly/data/IconList.dart';
 import 'package:finly/model/Category.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AddCategory extends StatelessWidget {
   AddCategory({super.key});

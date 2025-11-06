@@ -1,11 +1,8 @@
-import 'dart:math';
-
-import 'package:finly/controller/DetailsController.dart';
-import 'package:finly/data/IconList.dart';
+import 'package:finly/model/Category.dart';
+import 'package:finly/ui/TransactionHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/CategoryController.dart';
 
@@ -21,7 +18,6 @@ class DetailsScreen extends StatelessWidget {
   TextEditingController budgetController = TextEditingController();
 
   CategoryController categoryController = Get.put(CategoryController());
-  // CategoryList categoryList = CategoryList();
 
   @override
   Widget build(BuildContext context) {
@@ -230,10 +226,7 @@ class DetailsScreen extends StatelessWidget {
                   TextField(
                     controller: budgetController,
                     onChanged: (value) async {
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
                       double budget = double.tryParse(value) ?? 0.0;
-                      // prefs.setDouble('budget', budget);
-                      // categoryController.saveCategory();
                       category?.budgetAmount = budget;
                     },
                     decoration: InputDecoration(
@@ -268,6 +261,43 @@ class DetailsScreen extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[400],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        double spentAmount = double.tryParse(amountController.text) ?? 0.0;
+                        Get.to(
+                          TransactionHistory(
+                            id: id,
+                            spentAmount: spentAmount,
+                            description: descriptionController.text,
+                            date: dateController.text,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Transaction History',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.height,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepPurple,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
@@ -278,28 +308,27 @@ class DetailsScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () async {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
                         double enteredAmount = double.tryParse(amountController.text) ?? 0.0;
                         var budget = category?.budgetAmount ?? 0.0;
-                        // var total = category?.totalAmount ?? 0.0;
-                        if (category!.spentAmount!.isNull) {
+                        if (category!.spentAmount! == 0) {
                           Get.snackbar('Error', 'Please enter amount');
                         } else if (dateController.text.isEmpty) {
                           Get.snackbar('Error', 'Please select date');
-                        } else if (category.budgetAmount.isNull) {
+                        } else if (category.budgetAmount == 0) {
                           Get.snackbar('Error', 'Please enter budget');
                         } else if (enteredAmount >= budget) {
                           Get.snackbar('Error', 'Spent amount is greater than budget');
                         } else {
-                          // if (enteredAmount <= budget) {
-                          // var addedAmount = category.totalAmount + enteredAmount;
-                          // category.totalAmount = addedAmount;
-                          // // }
-                          // // prefs.setDouble('totalAmount', category.totalAmount);
-                          // categoryController.saveCategory();
                           var newCategory = category;
                           newCategory.totalAmount = (newCategory.totalAmount! + enteredAmount);
                           categoryController.updateCategory(newCategory);
+                          var cat = Category(
+                            spentAmount: enteredAmount,
+                            description: descriptionController.text,
+                            date: dateController.text,
+                            id: id,
+                          );
+                          // categoryController.hiveDatabase.addTransaction(cat);
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();
                           descriptionController.clear();
@@ -332,7 +361,7 @@ class DetailsScreen extends StatelessWidget {
       final formattedDate = DateFormat("dd-MM-yyyy").format(picked);
       dateController.text = formattedDate;
       categoryController.selectedDate = picked;
-      var categoryDate = categoryController.categoryList.value.firstWhereOrNull((cat) => cat.id == id);
+      var categoryDate = categoryController.categoryList.firstWhereOrNull((cat) => cat.id == id);
       categoryDate?.date = picked.toString();
     }
   }

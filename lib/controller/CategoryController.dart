@@ -1,14 +1,10 @@
-import 'dart:convert';
-
-import 'package:finly/data/IconList.dart';
-import 'package:finly/prefs/CategoryPrefs.dart';
+import 'package:finly/localStorage/hiveDatabase.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/Category.dart';
 
 class CategoryController extends GetxController {
-  CategoryPrefs categoryPrefs = CategoryPrefs();
+  HiveDatabase hiveDatabase = HiveDatabase();
 
   var categoryList = <Category>[].obs;
 
@@ -16,20 +12,20 @@ class CategoryController extends GetxController {
   var isLoading = false.obs;
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    categoryList.value = await categoryPrefs.getCategories();
+    categoryList.value = hiveDatabase.getAllCategories();
   }
 
   Future<void> addCategory(Category category) async {
     categoryList.add(category);
-    categoryPrefs.saveCategory(categoryList);
+    hiveDatabase.addCategory(categoryList);
   }
 
   Future<void> updateCategory(Category category) async {
     var index = categoryList.indexWhere((item) => category.id == item.id);
     if (index < 0) return;
     categoryList.insert(index, category);
-    categoryPrefs.saveCategory(categoryList);
+    hiveDatabase.addCategory(categoryList);
   }
 }
