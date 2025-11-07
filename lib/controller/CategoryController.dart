@@ -19,13 +19,13 @@ class CategoryController extends GetxController {
 
   Future<void> addCategory(Category category) async {
     categoryList.add(category);
-    hiveDatabase.addCategory(categoryList);
+    hiveDatabase.addCategory(category);
   }
 
   Future<void> updateCategory(Category category) async {
     var index = categoryList.indexWhere((item) => category.id == item.id);
     if (index < 0) return;
     categoryList.insert(index, category);
-    hiveDatabase.addCategory(categoryList);
+    hiveDatabase.addCategory(category);
   }
 }

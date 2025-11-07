@@ -322,13 +322,6 @@ class DetailsScreen extends StatelessWidget {
                           var newCategory = category;
                           newCategory.totalAmount = (newCategory.totalAmount! + enteredAmount);
                           categoryController.updateCategory(newCategory);
-                          var cat = Category(
-                            spentAmount: enteredAmount,
-                            description: descriptionController.text,
-                            date: dateController.text,
-                            id: id,
-                          );
-                          // categoryController.hiveDatabase.addTransaction(cat);
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();
                           descriptionController.clear();

@@ -4,8 +4,8 @@ import 'package:hive/hive.dart';
 class HiveDatabase{
   Box<Category> myBox = Hive.box<Category>('category');
 
-  Future<void> addCategory(List<Category> category) async{
-    myBox.addAll(category);
+  Future<void> addCategory(Category category) async{
+    myBox.add(category);
   }
 
   List<Category> getAllCategories(){

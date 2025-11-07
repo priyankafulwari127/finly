@@ -211,7 +211,6 @@ class AddCategory extends StatelessWidget {
                       date: DateTime.now().toString(),
                     );
                     await categoryController.addCategory(category);
-                    // await CategoryController().updateCategory(category);
                     nameController.clear();
                     budgetController.clear();
                     Get.snackbar("Success", "Category has been added");
