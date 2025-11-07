@@ -1,4 +1,5 @@
-import 'package:finly/model/Category.dart';
+import 'package:finly/model/categoryModel/Category.dart';
+import 'package:finly/model/transactionModel/Transaction.dart';
 import 'package:finly/ui/AddCategoryScreen.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:finly/ui/HomeScreen.dart';
@@ -8,16 +9,17 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive_flutter/adapters.dart';
 
-void main() async{
+void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(TransactionAdapter());
   await Hive.openBox<Category>('category');
+  await Hive.openBox<Transaction>('transaction');
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,17 @@ class MyApp extends StatelessWidget {
       initialRoute: "/home",
       routes: {
         '/home': (context) => HomeScreen(),
-        '/details': (context) => DetailsScreen(categoryName: '', id: '',),
+        '/details': (context) => DetailsScreen(
+              categoryName: '',
+              id: '',
+            ),
         '/addCategory': (context) => AddCategory(),
-        '/transactionHistory': (context) => TransactionHistory(id: '', spentAmount: 0.0, description: '', date: '',),
+        '/transactionHistory': (context) => TransactionHistory(
+              spentAmount: 0.0,
+              description: '',
+              date: '',
+              categoryId: '',
+            ),
       },
     );
   }

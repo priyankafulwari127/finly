@@ -1,4 +1,6 @@
-import 'package:finly/model/Category.dart';
+import 'package:finly/controller/TransactionController.dart';
+import 'package:finly/model/categoryModel/Category.dart';
+import 'package:finly/model/transactionModel/Transaction.dart';
 import 'package:finly/ui/TransactionHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class DetailsScreen extends StatelessWidget {
   TextEditingController budgetController = TextEditingController();
 
   CategoryController categoryController = Get.put(CategoryController());
+  TransactionController transactionController = Get.put(TransactionController());
 
   @override
   Widget build(BuildContext context) {
@@ -274,11 +277,11 @@ class DetailsScreen extends StatelessWidget {
                         double spentAmount = double.tryParse(amountController.text) ?? 0.0;
                         Get.to(
                           TransactionHistory(
-                            id: id,
                             spentAmount: spentAmount,
                             description: descriptionController.text,
                             date: dateController.text,
-                          ),
+                            categoryId: id,
+                          )
                         );
                       },
                       child: Text(
@@ -321,7 +324,25 @@ class DetailsScreen extends StatelessWidget {
                         } else {
                           var newCategory = category;
                           newCategory.totalAmount = (newCategory.totalAmount! + enteredAmount);
-                          categoryController.updateCategory(newCategory);
+
+                          var cat = Category(
+                            budgetAmount: budget,
+                            totalAmount: newCategory.totalAmount,
+                            spentAmount: enteredAmount,
+                            description: descriptionController.text,
+                            date: dateController.text,
+                          );
+                          await categoryController.updateCategory(cat);
+
+                          //add Transaction on save button callback
+                          var transact = Transaction(
+                            currentSpentAmount: enteredAmount,
+                            description: descriptionController.text,
+                            date: dateController.text,
+                            categoryId: id,
+                          );
+                          await transactionController.addTransaction(transact);
+
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();
                           descriptionController.clear();

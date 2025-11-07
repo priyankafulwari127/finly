@@ -1,7 +1,8 @@
 import 'package:finly/controller/CategoryController.dart';
-import 'package:finly/localStorage/hiveDatabase.dart';
+import 'package:finly/controller/TransactionController.dart';
+import 'package:finly/localStorage/CategoryHive.dart';
 import 'package:finly/main.dart';
-import 'package:finly/model/Category.dart';
+import 'package:finly/model/categoryModel/Category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,21 +14,24 @@ class TransactionHistory extends StatelessWidget {
   final double spentAmount;
   final String description;
   final String date;
-  final String id;
+  final String categoryId;
 
   TransactionHistory({
     super.key,
-    required this.id,
     required this.spentAmount,
     required this.description,
     required this.date,
+    required this.categoryId,
   });
 
+  TransactionController transactionController = Get.put(TransactionController());
   CategoryController categoryController = Get.put(CategoryController());
 
   @override
   Widget build(BuildContext context) {
-    var category = categoryController.categoryList.firstWhereOrNull((cat) => cat.id == id);
+    var transaction = transactionController.transactionList.firstWhereOrNull(
+      (transact) => transact.categoryId == categoryId,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -51,53 +55,64 @@ class TransactionHistory extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
       ),
-      body: ValueListenableBuilder<Box<Category>>(
-        valueListenable: HiveDatabase.getTransactions().listenable(),
-        builder: (context, box, _) {
-          final transactions = box.values.toList(); //TODO
-          return Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        category?.description as String,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: transactionController.transactionList.length,
+          itemBuilder: (context, index) {
+            return transactionController.transactionList.isEmpty
+                ? Text("No Transactions Found")
+                : transactionController.isLoading.value
+                    ? CircularProgressIndicator()
+                    : Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ),
-                      SizedBox(
-                        height: 2,
-                      ),
-                      Text(
-                        category?.date as String,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    transaction!.description!,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    transaction.date!,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(
+                                flex: 1,
+                              ),
+                              Text(
+                                transaction.currentSpentAmount.toString(),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  Text(
-                    category?.spentAmount as String,
-                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
-                  )
-                ],
-              ),
-            ),
-          );
-        },
+                      );
+          },
+        ),
       ),
     );
   }

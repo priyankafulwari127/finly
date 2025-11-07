@@ -1,6 +1,6 @@
 import 'package:finly/controller/CategoryController.dart';
 import 'package:finly/data/IconList.dart';
-import 'package:finly/model/Category.dart';
+import 'package:finly/model/categoryModel/Category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -211,10 +211,10 @@ class AddCategory extends StatelessWidget {
                       date: DateTime.now().toString(),
                     );
                     await categoryController.addCategory(category);
+                    Get.back();
+                    Get.snackbar("Success", "Category has been added");
                     nameController.clear();
                     budgetController.clear();
-                    Get.snackbar("Success", "Category has been added");
-                    Get.back();
                   }
                 },
                 child: Text(

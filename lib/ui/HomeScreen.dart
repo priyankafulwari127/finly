@@ -3,7 +3,6 @@ import 'package:finly/data/IconList.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -52,12 +51,7 @@ class HomeScreen extends StatelessWidget {
                   itemCount: categoryController.categoryList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
-                      onTap: () async {
-                        //saves the clicked category
-                        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                        sharedPreferences.setString('selected_category', categoryController.categoryList.elementAt(index).categoryName ?? '');
-                        sharedPreferences.setString('selected_category_id', categoryController.categoryList.elementAt(index).id ?? '');
-                        //navigates to the clicked category
+                      onTap: () {
                         Get.to(
                           DetailsScreen(
                             categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
