@@ -322,12 +322,13 @@ class DetailsScreen extends StatelessWidget {
                         } else if (enteredAmount >= budget) {
                           Get.snackbar('Error', 'Spent amount is greater than budget');
                         } else {
-                          var newCategory = category;
-                          newCategory.totalAmount = (newCategory.totalAmount! + enteredAmount);
+                          // var newCategory = category;
+                          // newCategory.totalAmount = (newCategory.totalAmount! + enteredAmount);
+                          category.totalAmount = category.totalAmount! + enteredAmount;
 
                           var cat = Category(
                             budgetAmount: budget,
-                            totalAmount: newCategory.totalAmount,
+                            totalAmount: category.totalAmount,
                             spentAmount: enteredAmount,
                             description: descriptionController.text,
                             date: dateController.text,
@@ -340,6 +341,7 @@ class DetailsScreen extends StatelessWidget {
                             description: descriptionController.text,
                             date: dateController.text,
                             categoryId: id,
+                            transactionId: DateTime.now().toIso8601String(),
                           );
                           await transactionController.addTransaction(transact);
 
