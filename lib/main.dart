@@ -10,11 +10,15 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive_flutter/adapters.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(TransactionAdapter());
+
   await Hive.openBox<Category>('category');
   await Hive.openBox<Transaction>('transaction');
+
   runApp(const MyApp());
 }
 

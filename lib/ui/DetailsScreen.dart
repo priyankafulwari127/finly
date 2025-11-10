@@ -21,6 +21,7 @@ class DetailsScreen extends StatelessWidget {
 
   CategoryController categoryController = Get.put(CategoryController());
   TransactionController transactionController = Get.put(TransactionController());
+  var index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,6 @@ class DetailsScreen extends StatelessWidget {
                   ),
                   TextField(
                     onChanged: (value) async {
-                      // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                       var amount = double.tryParse(value);
                       category?.spentAmount = amount;
                       double budget = category?.budgetAmount ?? 0.0;
@@ -313,37 +313,41 @@ class DetailsScreen extends StatelessWidget {
                       onPressed: () async {
                         double enteredAmount = double.tryParse(amountController.text) ?? 0.0;
                         var budget = category?.budgetAmount ?? 0.0;
-                        if (category!.spentAmount! == 0) {
+                        if (enteredAmount == 0) {
                           Get.snackbar('Error', 'Please enter amount');
                         } else if (dateController.text.isEmpty) {
                           Get.snackbar('Error', 'Please select date');
-                        } else if (category.budgetAmount == 0) {
+                        } else if (budget == 0) {
                           Get.snackbar('Error', 'Please enter budget');
                         } else if (enteredAmount >= budget) {
                           Get.snackbar('Error', 'Spent amount is greater than budget');
                         } else {
-                          // var newCategory = category;
-                          // newCategory.totalAmount = (newCategory.totalAmount! + enteredAmount);
-                          category.totalAmount = category.totalAmount! + enteredAmount;
+                          var newCategory = category;
+                          newCategory?.totalAmount = (newCategory.totalAmount! + enteredAmount);
+                          newCategory?.spentAmount = enteredAmount;
+                          newCategory?.description = descriptionController.text;
+                          newCategory?.date = dateController.text;
+                          // category?.totalAmount = category.totalAmount! + enteredAmount;
 
-                          var cat = Category(
-                            budgetAmount: budget,
-                            totalAmount: category.totalAmount,
-                            spentAmount: enteredAmount,
-                            description: descriptionController.text,
-                            date: dateController.text,
-                          );
-                          await categoryController.updateCategory(cat);
+                          // var cat = Category(
+                          //   budgetAmount: budget,
+                          //   totalAmount: category?.totalAmount,
+                          //   spentAmount: enteredAmount,
+                          //   description: descriptionController.text,
+                          //   date: dateController.text,
+                          //   id: id,
+                          // );
+                          await categoryController.updateCategory(newCategory!);
 
                           //add Transaction on save button callback
                           var transact = Transaction(
                             currentSpentAmount: enteredAmount,
                             description: descriptionController.text,
                             date: dateController.text,
+                            transactionId: DateTime.now().toIso8601String().toString(),
                             categoryId: id,
-                            transactionId: DateTime.now().toIso8601String(),
                           );
-                          await transactionController.addTransaction(transact);
+                          await transactionController.updateTransaction(transact.transactionId!, transact);
 
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();

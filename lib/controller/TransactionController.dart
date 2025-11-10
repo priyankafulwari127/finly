@@ -12,11 +12,11 @@ class TransactionController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    transactionList.value = transactionHive.getTransactions();
+    transactionList.value = transactionHive.getAllTransactions();
   }
 
-  Future<void> addTransaction(Transaction transaction)async{
+  Future<void> updateTransaction(String transactionId, Transaction transaction)async{
     transactionList.add(transaction);
-    transactionHive.addTransaction(transaction);
+    transactionHive.updateTransaction(transactionId, transaction);
   }
 }

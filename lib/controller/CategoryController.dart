@@ -26,6 +26,7 @@ class CategoryController extends GetxController {
     var index = categoryList.indexWhere((item) => category.id == item.id);
     if (index < 0) return;
     categoryList.insert(index, category);
-    categoryHive.addCategory(category);
+    categoryHive.updateCategory(index, category);
+    // categoryHive.addCategory(category);
   }
 }

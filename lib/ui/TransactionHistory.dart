@@ -3,6 +3,7 @@ import 'package:finly/controller/TransactionController.dart';
 import 'package:finly/localStorage/CategoryHive.dart';
 import 'package:finly/main.dart';
 import 'package:finly/model/categoryModel/Category.dart';
+import 'package:finly/model/transactionModel/Transaction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,9 +30,7 @@ class TransactionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var transaction = transactionController.transactionList.firstWhereOrNull(
-      (transact) => transact.categoryId == categoryId,
-    );
+    var transaction = transactionController.transactionList.firstWhereOrNull((transact) => transact.categoryId == categoryId,);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,62 +56,62 @@ class TransactionHistory extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: transactionController.transactionList.length,
-          itemBuilder: (context, index) {
-            return transactionController.transactionList.isEmpty
-                ? Text("No Transactions Found")
-                : transactionController.isLoading.value
-                    ? CircularProgressIndicator()
-                    : Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    transaction!.description!,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
+        child: Obx(() {
+          return transactionController.transactionList.isEmpty
+              ? Text("No Transactions Found")
+              : ListView.builder(
+                  itemCount: transactionController.transactionList.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  transaction!.description,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
                                   ),
-                                  SizedBox(
-                                    height: 2,
-                                  ),
-                                  Text(
-                                    transaction.date!,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Spacer(
-                                flex: 1,
-                              ),
-                              Text(
-                                transaction.currentSpentAmount.toString(),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
                                 ),
-                              )
-                            ],
-                          ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                  transaction.date,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Spacer(
+                              flex: 1,
+                            ),
+                            Text(
+                              transaction.currentSpentAmount.toString(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          ],
                         ),
-                      );
-          },
-        ),
+                      ),
+                    );
+                  },
+                );
+        }),
       ),
     );
   }
