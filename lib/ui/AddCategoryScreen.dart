@@ -205,7 +205,6 @@ class AddCategory extends StatelessWidget {
                       categoryName: nameController.text,
                       budgetAmount: budget,
                       totalAmount: 0.0,
-                      spentAmount: 0.0,
                       description: '',
                       id: DateTime.now().millisecondsSinceEpoch.toString(),
                       date: DateTime.now().toString(),

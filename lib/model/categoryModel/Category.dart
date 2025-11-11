@@ -10,19 +10,16 @@ class Category {
   @HiveField(2)
   String? id;
   @HiveField(3)
-  double? spentAmount;
-  @HiveField(4)
   String? description;
-  @HiveField(5)
+  @HiveField(4)
   String? date;
-  @HiveField(6)
+  @HiveField(5)
   double? budgetAmount;
 
   Category({
     this.categoryName,
     this.totalAmount,
     this.id,
-    this.spentAmount,
     this.budgetAmount,
     this.date,
     this.description,
@@ -33,7 +30,6 @@ class Category {
         'categoryName': categoryName,
         'totalAmount': totalAmount,
         'id': id,
-        'spentAmount': spentAmount,
         'description': description,
         'date': date,
         'budgetAmount': budgetAmount,
@@ -43,7 +39,6 @@ class Category {
         id: json['id'],
         categoryName: json['categoryName'],
         totalAmount: json['totalAmount'],
-        spentAmount: json['spentAmount'],
         budgetAmount: json['budgetAmount'],
         date: json['date'],
         description: json['description'],

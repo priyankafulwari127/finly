@@ -15,4 +15,8 @@ class CategoryHive {
   Future<void> updateCategory(int index, Category category) async {
     categoryBox.putAt(index, category);
   }
+
+  Category getCategoryById(String categoryId) {
+    return categoryBox.values.firstWhere((c)=> c.id == categoryId);
+  }
 }

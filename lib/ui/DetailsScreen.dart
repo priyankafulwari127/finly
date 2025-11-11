@@ -25,7 +25,7 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var category = categoryController.categoryList.firstWhereOrNull((cat) => cat.id == id);
+    var category = categoryController.getCategoryById(id);
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +94,6 @@ class DetailsScreen extends StatelessWidget {
                   TextField(
                     onChanged: (value) async {
                       var amount = double.tryParse(value);
-                      category?.spentAmount = amount;
                       double budget = category?.budgetAmount ?? 0.0;
                       if (amount! >= budget) {
                         Get.snackbar(
@@ -322,23 +321,6 @@ class DetailsScreen extends StatelessWidget {
                         } else if (enteredAmount >= budget) {
                           Get.snackbar('Error', 'Spent amount is greater than budget');
                         } else {
-                          var newCategory = category;
-                          newCategory?.totalAmount = (newCategory.totalAmount! + enteredAmount);
-                          newCategory?.spentAmount = enteredAmount;
-                          newCategory?.description = descriptionController.text;
-                          newCategory?.date = dateController.text;
-                          // category?.totalAmount = category.totalAmount! + enteredAmount;
-
-                          // var cat = Category(
-                          //   budgetAmount: budget,
-                          //   totalAmount: category?.totalAmount,
-                          //   spentAmount: enteredAmount,
-                          //   description: descriptionController.text,
-                          //   date: dateController.text,
-                          //   id: id,
-                          // );
-                          await categoryController.updateCategory(newCategory!);
-
                           //add Transaction on save button callback
                           var transact = Transaction(
                             currentSpentAmount: enteredAmount,
