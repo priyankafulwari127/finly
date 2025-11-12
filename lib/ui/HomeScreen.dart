@@ -74,7 +74,7 @@ class HomeScreen extends StatelessWidget {
                                 color: Colors.grey[350],
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Icon(iconList.icons.elementAt(index)),
+                                  child: Icon(categoryController.categoryList.elementAt(index).icon),
                                 ),
                               ),
                               SizedBox(

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class IconList {
 
-  var icons = {
+  List<IconData> icons = [
     CupertinoIcons.doc_text,
     CupertinoIcons.music_note_2,
     CupertinoIcons.train_style_one,
@@ -16,5 +16,5 @@ class IconList {
     CupertinoIcons.money_euro,
     CupertinoIcons.money_dollar_circle,
     CupertinoIcons.money_dollar_circle_fill,
-  };
+  ];
 }

@@ -11,6 +11,8 @@ class AddCategory extends StatelessWidget {
   TextEditingController budgetController = TextEditingController();
   CategoryController categoryController = Get.put(CategoryController());
   IconList iconList = IconList();
+  IconData? selectedIcon;
+  var isIconSelected = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -114,8 +116,12 @@ class AddCategory extends StatelessWidget {
                         childAspectRatio: 1.1,
                       ),
                       itemBuilder: (BuildContext context, int index) {
+                        var icon = iconList.icons[index];
                         return GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            isIconSelected.value = true;
+                            selectedIcon = icon;
+                          },
                           child: Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
@@ -125,11 +131,9 @@ class AddCategory extends StatelessWidget {
                               ),
                             ),
                             color: Colors.grey[350],
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                iconList.icons.elementAt(index),
-                              ),
+                            child: Icon(
+                              icon,
+                              color: isIconSelected.value ? Colors.deepPurple[200] : Colors.black,
                             ),
                           ),
                         );
@@ -199,8 +203,7 @@ class AddCategory extends StatelessWidget {
                   } else if (budgetController.text.isEmpty) {
                     Get.snackbar('Error', 'Please enter budget');
                   } else {
-                    double? budget =
-                        double.tryParse(budgetController.text) ?? 0.0;
+                    double? budget = double.tryParse(budgetController.text) ?? 0.0;
                     var category = Category(
                       categoryName: nameController.text,
                       budgetAmount: budget,
@@ -208,6 +211,7 @@ class AddCategory extends StatelessWidget {
                       description: '',
                       id: DateTime.now().millisecondsSinceEpoch.toString(),
                       date: DateTime.now().toString(),
+                      icon: selectedIcon!,
                     );
                     await categoryController.addCategory(category);
                     Get.back();
