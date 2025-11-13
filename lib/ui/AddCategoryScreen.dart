@@ -1,6 +1,7 @@
 import 'package:finly/controller/CategoryController.dart';
 import 'package:finly/data/IconList.dart';
 import 'package:finly/model/categoryModel/Category.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,8 +12,8 @@ class AddCategory extends StatelessWidget {
   TextEditingController budgetController = TextEditingController();
   CategoryController categoryController = Get.put(CategoryController());
   IconList iconList = IconList();
-  IconData? selectedIcon;
-  var isIconSelected = false.obs;
+  IconData? selectedIcon = CupertinoIcons.doc_text;
+  var selectedIndex = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -117,25 +118,29 @@ class AddCategory extends StatelessWidget {
                       ),
                       itemBuilder: (BuildContext context, int index) {
                         var icon = iconList.icons[index];
-                        return GestureDetector(
-                          onTap: () {
-                            isIconSelected.value = true;
-                            selectedIcon = icon;
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  12,
+                        return Obx(
+                          () {
+                            return GestureDetector(
+                              onTap: () {
+                                selectedIndex.value = index;
+                                selectedIcon = icon;
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                      12,
+                                    ),
+                                  ),
+                                ),
+                                color: selectedIndex.value == index ? Colors.deepPurple[400] : Colors.grey[350],
+                                child: Icon(
+                                  icon,
+                                  color: selectedIndex.value == index ? Colors.white : Colors.black,
                                 ),
                               ),
-                            ),
-                            color: Colors.grey[350],
-                            child: Icon(
-                              icon,
-                              color: isIconSelected.value ? Colors.deepPurple[200] : Colors.black,
-                            ),
-                          ),
+                            );
+                          }
                         );
                       },
                     ),
@@ -211,7 +216,9 @@ class AddCategory extends StatelessWidget {
                       description: '',
                       id: DateTime.now().millisecondsSinceEpoch.toString(),
                       date: DateTime.now().toString(),
-                      icon: selectedIcon!,
+                      iconPoints: selectedIcon!.codePoint,
+                      fontFamily: selectedIcon!.fontFamily!,
+                      iconFontPackage: selectedIcon!.fontPackage!,
                     );
                     await categoryController.addCategory(category);
                     Get.back();

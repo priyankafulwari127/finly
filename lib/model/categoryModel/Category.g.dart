@@ -23,14 +23,16 @@ class CategoryAdapter extends TypeAdapter<Category> {
       budgetAmount: fields[5] as double?,
       date: fields[4] as String?,
       description: fields[3] as String?,
-      icon: fields[6] as IconData,
+      iconPoints: fields[6] as int,
+      fontFamily: fields[7] as String,
+      iconFontPackage: fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Category obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.categoryName)
       ..writeByte(1)
@@ -44,7 +46,11 @@ class CategoryAdapter extends TypeAdapter<Category> {
       ..writeByte(5)
       ..write(obj.budgetAmount)
       ..writeByte(6)
-      ..write(obj.icon);
+      ..write(obj.iconPoints)
+      ..writeByte(7)
+      ..write(obj.fontFamily)
+      ..writeByte(8)
+      ..write(obj.iconFontPackage);
   }
 
   @override

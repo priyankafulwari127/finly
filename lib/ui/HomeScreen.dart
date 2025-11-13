@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                         Get.to(
                           DetailsScreen(
                             categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
-                            id: categoryController.categoryList.elementAt(index).id ?? 'no id',
+                            id: categoryController.categoryList.elementAt(index).id,
                           ),
                         );
                       },
@@ -74,7 +74,7 @@ class HomeScreen extends StatelessWidget {
                                 color: Colors.grey[350],
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Icon(categoryController.categoryList.elementAt(index).icon),
+                                  child: Icon(categoryController.categoryList.elementAt(index).getIconData()),
                                 ),
                               ),
                               SizedBox(

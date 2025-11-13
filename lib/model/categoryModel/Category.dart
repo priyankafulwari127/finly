@@ -17,7 +17,11 @@ class Category {
   @HiveField(5)
   double? budgetAmount;
   @HiveField(6)
-  final IconData icon;
+  final int iconPoints;
+  @HiveField(7)
+  final String fontFamily;
+  @HiveField(8)
+  final String iconFontPackage;
 
   Category({
     this.categoryName,
@@ -26,6 +30,12 @@ class Category {
     this.budgetAmount,
     this.date,
     this.description,
-    required this.icon,
+    required this.iconPoints,
+    required this.fontFamily,
+    required this.iconFontPackage,
   });
+
+  IconData getIconData(){
+    return IconData(iconPoints, fontFamily: fontFamily, fontPackage: iconFontPackage);
+  }
 }
