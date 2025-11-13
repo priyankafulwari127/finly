@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:finly/controller/CategoryController.dart';
 import 'package:finly/data/IconList.dart';
 import 'package:finly/model/categoryModel/Category.dart';
@@ -6,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddCategory extends StatelessWidget {
-  AddCategory({super.key});
+  final Category? category;
+
+  AddCategory({this.category});
 
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
@@ -17,6 +21,9 @@ class AddCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = category!.categoryName!;
+    budgetController.text = category!.budgetAmount.toString();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -118,30 +125,28 @@ class AddCategory extends StatelessWidget {
                       ),
                       itemBuilder: (BuildContext context, int index) {
                         var icon = iconList.icons[index];
-                        return Obx(
-                          () {
-                            return GestureDetector(
-                              onTap: () {
-                                selectedIndex.value = index;
-                                selectedIcon = icon;
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(
-                                      12,
-                                    ),
+                        return Obx(() {
+                          return GestureDetector(
+                            onTap: () {
+                              selectedIndex.value = index;
+                              selectedIcon = icon;
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(
+                                    12,
                                   ),
                                 ),
-                                color: selectedIndex.value == index ? Colors.deepPurple[400] : Colors.grey[350],
-                                child: Icon(
-                                  icon,
-                                  color: selectedIndex.value == index ? Colors.white : Colors.black,
-                                ),
                               ),
-                            );
-                          }
-                        );
+                              color: selectedIndex.value == index ? Colors.deepPurple[400] : Colors.grey[350],
+                              child: Icon(
+                                icon,
+                                color: selectedIndex.value == index ? Colors.white : Colors.black,
+                              ),
+                            ),
+                          );
+                        });
                       },
                     ),
                   ),
@@ -209,18 +214,28 @@ class AddCategory extends StatelessWidget {
                     Get.snackbar('Error', 'Please enter budget');
                   } else {
                     double? budget = double.tryParse(budgetController.text) ?? 0.0;
-                    var category = Category(
-                      categoryName: nameController.text,
-                      budgetAmount: budget,
-                      totalAmount: 0.0,
-                      description: '',
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      date: DateTime.now().toString(),
-                      iconPoints: selectedIcon!.codePoint,
-                      fontFamily: selectedIcon!.fontFamily!,
-                      iconFontPackage: selectedIcon!.fontPackage!,
-                    );
-                    await categoryController.addCategory(category);
+                    var cat = category!.id!.isEmpty
+                        ? Category(
+                            categoryName: nameController.text,
+                            budgetAmount: budget,
+                            totalAmount: 0.0,
+                            description: '',
+                            id: DateTime.now().millisecondsSinceEpoch.toString(),
+                            date: DateTime.now().toString(),
+                            iconPoints: selectedIcon!.codePoint,
+                            fontFamily: selectedIcon!.fontFamily!,
+                            iconFontPackage: selectedIcon!.fontPackage!,
+                          )
+                        : Category(
+                            categoryName: nameController.text,
+                            budgetAmount: budget,
+                            iconPoints:selectedIcon!.codePoint,
+                            fontFamily: selectedIcon!.fontFamily!,
+                            iconFontPackage: selectedIcon!.fontPackage!,
+                            id: category!.id!,
+                          );
+
+                    category!.id!.isEmpty ? await categoryController.addCategory(cat) : await categoryController.updateCategory(cat);
                     Get.back();
                     Get.snackbar("Success", "Category has been added");
                     nameController.clear();
@@ -228,7 +243,7 @@ class AddCategory extends StatelessWidget {
                   }
                 },
                 child: Text(
-                  'Create',
+                  category!.id!.isEmpty ? 'Create' : 'Save',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

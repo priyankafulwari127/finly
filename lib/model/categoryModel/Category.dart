@@ -9,7 +9,7 @@ class Category {
   @HiveField(1)
   double? totalAmount;
   @HiveField(2)
-  final String id;
+  String? id;
   @HiveField(3)
   String? description;
   @HiveField(4)
@@ -26,7 +26,7 @@ class Category {
   Category({
     this.categoryName,
     this.totalAmount,
-    required this.id,
+    this.id,
     this.budgetAmount,
     this.date,
     this.description,

@@ -1,5 +1,6 @@
 import 'package:finly/controller/CategoryController.dart';
 import 'package:finly/data/IconList.dart';
+import 'package:finly/ui/AddCategoryScreen.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
         foregroundColor: Colors.deepPurple,
         backgroundColor: Colors.deepPurple,
         onPressed: () {
-          Get.toNamed('/addCategory');
+          Get.to(AddCategory());
         },
         child: Icon(
           Icons.add,
@@ -38,10 +39,10 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Obx(() {
-          return categoryController.categoryList.isEmpty
-              ? Center(child: Text("No Category Found"))
-              : GridView.builder(
+        child: categoryController.categoryList.isEmpty
+            ? Center(child: Text("No Category Found"))
+            : Obx(() {
+                return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 8,
@@ -55,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                         Get.to(
                           DetailsScreen(
                             categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
-                            id: categoryController.categoryList.elementAt(index).id,
+                            id: categoryController.categoryList.elementAt(index).id!,
                           ),
                         );
                       },
@@ -69,13 +70,56 @@ class HomeScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Card(
-                                elevation: 2,
-                                color: Colors.grey[350],
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(categoryController.categoryList.elementAt(index).getIconData()),
-                                ),
+                              Row(
+                                children: [
+                                  Card(
+                                    elevation: 2,
+                                    color: Colors.grey[350],
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        categoryController.categoryList.elementAt(index).getIconData(),
+                                      ),
+                                    ),
+                                  ),
+                                  Spacer(
+                                    flex: 1,
+                                  ),
+                                  PopupMenuButton(
+                                    itemBuilder: (BuildContext context) => <PopupMenuEntry<CategoryMenu>>[
+                                      PopupMenuItem(
+                                        child: Text(
+                                          'Edit',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Get.to(
+                                            AddCategory(
+                                              category: categoryController.categoryHive.getCategoryById(
+                                                categoryController.categoryList.elementAt(index).id!,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      PopupMenuItem(
+                                        child: Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          await categoryController.removeCategory(index);
+                                        },
+                                      )
+                                    ],
+                                  )
+                                ],
                               ),
                               SizedBox(
                                 height: 4,
@@ -96,8 +140,10 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 );
-        }),
+              }),
       ),
     );
   }
 }
+
+enum CategoryMenu { edit, delete }

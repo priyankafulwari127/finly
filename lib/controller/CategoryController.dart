@@ -16,9 +16,7 @@ class CategoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    categoryList.value = categoryHive.getAllCategories().map((c)=>
-        getCategoryWithTotal(c)
-    ).toList();
+    categoryList.value = categoryHive.getAllCategories().map((c) => getCategoryWithTotal(c)).toList();
   }
 
   Category getCategoryById(String categoryId) {
@@ -40,6 +38,10 @@ class CategoryController extends GetxController {
     if (index < 0) return;
     categoryList.insert(index, category);
     categoryHive.updateCategory(index, category);
-    // categoryHive.addCategory(category);
+  }
+
+  Future<void> removeCategory(int index) async {
+    categoryList.removeAt(index);
+    categoryHive.removeCategory(index);
   }
 }

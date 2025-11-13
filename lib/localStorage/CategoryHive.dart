@@ -19,4 +19,8 @@ class CategoryHive {
   Category getCategoryById(String categoryId) {
     return categoryBox.values.firstWhere((c)=> c.id == categoryId);
   }
+
+  Future<void> removeCategory(int index)async{
+    categoryBox.deleteAt(index);
+  }
 }
