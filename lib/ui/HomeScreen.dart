@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
         foregroundColor: Colors.deepPurple,
         backgroundColor: Colors.deepPurple,
         onPressed: () {
-          Get.to(AddCategory());
+          Get.toNamed('/addCategory');
         },
         child: Icon(
           Icons.add,
@@ -39,108 +39,126 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: categoryController.categoryList.isEmpty
-            ? Center(child: Text("No Category Found"))
-            : Obx(() {
-                return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1.7,
-                  ),
-                  itemCount: categoryController.categoryList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(
-                          DetailsScreen(
-                            categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
-                            id: categoryController.categoryList.elementAt(index).id!,
-                          ),
-                        );
-                      },
-                      child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+        child: Obx(
+          () {
+            return categoryController.isLoading.value
+                ? Center(child: CircularProgressIndicator())
+                : categoryController.categoryList.isEmpty
+                    ? Center(
+                        child: Text('No Category Found'),
+                      )
+                    : GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          childAspectRatio: 1.7,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Card(
-                                    elevation: 2,
-                                    color: Colors.grey[350],
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        categoryController.categoryList.elementAt(index).getIconData(),
+                        itemCount: categoryController.categoryList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                DetailsScreen(
+                                  categoryName: categoryController.categoryList
+                                          .elementAt(index)
+                                          .categoryName ??
+                                      'No Name',
+                                  id: categoryController.categoryList
+                                      .elementAt(index)
+                                      .id,
+                                ),
+                              );
+                            },
+                            child: Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Card(
+                                          elevation: 2,
+                                          color: Colors.grey[350],
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Icon(
+                                              categoryController.categoryList
+                                                  .elementAt(index)
+                                                  .getIconData(),
+                                            ),
+                                          ),
+                                        ),
+                                        Spacer(
+                                          flex: 1,
+                                        ),
+                                        PopupMenuButton(
+                                          itemBuilder: (BuildContext context) =>
+                                              <PopupMenuEntry<CategoryMenu>>[
+                                            PopupMenuItem(
+                                              child: Text(
+                                                'Edit',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                Get.to(
+                                                  AddCategory(
+                                                      // category: categoryController.categoryHive.getCategoryById(
+                                                      //   categoryController.categoryList.elementAt(index).id!,
+                                                      // ),
+                                                      ),
+                                                );
+                                              },
+                                            ),
+                                            PopupMenuItem(
+                                              child: Text(
+                                                'Delete',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              onTap: () async {
+                                                await categoryController
+                                                    .removeCategory(index);
+                                              },
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      categoryController.categoryList
+                                              .elementAt(index)
+                                              .categoryName ??
+                                          '',
+                                      textAlign: TextAlign.left,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        fontSize: 16,
                                       ),
                                     ),
-                                  ),
-                                  Spacer(
-                                    flex: 1,
-                                  ),
-                                  PopupMenuButton(
-                                    itemBuilder: (BuildContext context) => <PopupMenuEntry<CategoryMenu>>[
-                                      PopupMenuItem(
-                                        child: Text(
-                                          'Edit',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          Get.to(
-                                            AddCategory(
-                                              category: categoryController.categoryHive.getCategoryById(
-                                                categoryController.categoryList.elementAt(index).id!,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      PopupMenuItem(
-                                        child: Text(
-                                          'Delete',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        onTap: () async {
-                                          await categoryController.removeCategory(index);
-                                        },
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                categoryController.categoryList.elementAt(index).categoryName ?? '',
-                                textAlign: TextAlign.left,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: 16,
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }),
+                            ),
+                          );
+                        },
+                      );
+          },
+        ),
       ),
     );
   }

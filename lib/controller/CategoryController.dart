@@ -16,7 +16,12 @@ class CategoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    categoryList.value = categoryHive.getAllCategories().map((c) => getCategoryWithTotal(c)).toList();
+    categoryList.value = categoryHive
+        .getAllCategories()
+        .map(
+          (c) => getCategoryWithTotal(c),
+        )
+        .toList();
   }
 
   Category getCategoryById(String categoryId) {
@@ -24,7 +29,7 @@ class CategoryController extends GetxController {
   }
 
   Category getCategoryWithTotal(Category c) {
-    c.totalAmount = transactionHive.getTotalByCategory(c.id!);
+    c.totalAmount = transactionHive.getTotalByCategory(c.id);
     return c;
   }
 

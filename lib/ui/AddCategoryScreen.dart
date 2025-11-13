@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddCategory extends StatelessWidget {
-  final Category? category;
-
-  AddCategory({this.category});
+  AddCategory({
+    super.key
+  });
 
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
@@ -21,9 +21,6 @@ class AddCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = category!.categoryName!;
-    budgetController.text = category!.budgetAmount.toString();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -139,10 +136,14 @@ class AddCategory extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              color: selectedIndex.value == index ? Colors.deepPurple[400] : Colors.grey[350],
+                              color: selectedIndex.value == index
+                                  ? Colors.deepPurple[400]
+                                  : Colors.grey[350],
                               child: Icon(
                                 icon,
-                                color: selectedIndex.value == index ? Colors.white : Colors.black,
+                                color: selectedIndex.value == index
+                                    ? Colors.white
+                                    : Colors.black,
                               ),
                             ),
                           );
@@ -213,29 +214,20 @@ class AddCategory extends StatelessWidget {
                   } else if (budgetController.text.isEmpty) {
                     Get.snackbar('Error', 'Please enter budget');
                   } else {
-                    double? budget = double.tryParse(budgetController.text) ?? 0.0;
-                    var cat = category!.id!.isEmpty
-                        ? Category(
-                            categoryName: nameController.text,
-                            budgetAmount: budget,
-                            totalAmount: 0.0,
-                            description: '',
-                            id: DateTime.now().millisecondsSinceEpoch.toString(),
-                            date: DateTime.now().toString(),
-                            iconPoints: selectedIcon!.codePoint,
-                            fontFamily: selectedIcon!.fontFamily!,
-                            iconFontPackage: selectedIcon!.fontPackage!,
-                          )
-                        : Category(
-                            categoryName: nameController.text,
-                            budgetAmount: budget,
-                            iconPoints:selectedIcon!.codePoint,
-                            fontFamily: selectedIcon!.fontFamily!,
-                            iconFontPackage: selectedIcon!.fontPackage!,
-                            id: category!.id!,
-                          );
-
-                    category!.id!.isEmpty ? await categoryController.addCategory(cat) : await categoryController.updateCategory(cat);
+                    double? budget =
+                        double.tryParse(budgetController.text) ?? 0.0;
+                    var category = Category(
+                      categoryName: nameController.text,
+                      budgetAmount: budget,
+                      totalAmount: 0.0,
+                      description: '',
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      date: DateTime.now().toString(),
+                      iconPoints: selectedIcon!.codePoint,
+                      fontFamily: selectedIcon!.fontFamily!,
+                      iconFontPackage: selectedIcon!.fontPackage!,
+                    );
+                    await categoryController.addCategory(category);
                     Get.back();
                     Get.snackbar("Success", "Category has been added");
                     nameController.clear();
@@ -243,7 +235,7 @@ class AddCategory extends StatelessWidget {
                   }
                 },
                 child: Text(
-                  category!.id!.isEmpty ? 'Create' : 'Save',
+                  'Create',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
