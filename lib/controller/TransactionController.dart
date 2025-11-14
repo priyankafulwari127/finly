@@ -17,6 +17,6 @@ class TransactionController extends GetxController{
 
   Future<void> updateTransaction(String transactionId, Transaction transaction)async{
     transactionList.add(transaction);
-    transactionHive.updateTransaction(transactionId, transaction);
+    await transactionHive.updateTransaction(transactionId, transaction);
   }
 }

@@ -16,7 +16,6 @@ class DetailsScreen extends StatelessWidget {
 
   TextEditingController amountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
 
   CategoryController categoryController = Get.put(CategoryController());
@@ -70,7 +69,7 @@ class DetailsScreen extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      "${category?.totalAmount}",
+                      "${category.totalAmount}",
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -94,7 +93,7 @@ class DetailsScreen extends StatelessWidget {
                   TextField(
                     onChanged: (value) async {
                       var amount = double.tryParse(value);
-                      double budget = category?.budgetAmount ?? 0.0;
+                      double budget = category.budgetAmount ?? 0.0;
                       if (amount! >= budget) {
                         Get.snackbar(
                           'Error',
@@ -185,9 +184,9 @@ class DetailsScreen extends StatelessWidget {
                   ),
                   TextField(
                     onTap: () {
-                      _selectDate(context);
+                      categoryController.selectDate(context, category);
                     },
-                    controller: dateController,
+                    controller: categoryController.dateController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       focusedBorder: OutlineInputBorder(
@@ -229,7 +228,7 @@ class DetailsScreen extends StatelessWidget {
                     controller: budgetController,
                     onChanged: (value) async {
                       double budget = double.tryParse(value) ?? 0.0;
-                      category?.budgetAmount = budget;
+                      category.budgetAmount = budget;
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -249,7 +248,7 @@ class DetailsScreen extends StatelessWidget {
                         ),
                         borderSide: BorderSide.none,
                       ),
-                      hintText: category?.budgetAmount != 0 ? category?.budgetAmount.toString() : 'Enter monthly budget',
+                      hintText: category.budgetAmount != 0 ? category.budgetAmount.toString() : 'Enter monthly budget',
                       fillColor: Colors.grey[300],
                       filled: true,
                     ),
@@ -278,9 +277,9 @@ class DetailsScreen extends StatelessWidget {
                           TransactionHistory(
                             spentAmount: spentAmount,
                             description: descriptionController.text,
-                            date: dateController.text,
+                            date: categoryController.dateController.text,
                             categoryId: id,
-                          )
+                          ),
                         );
                       },
                       child: Text(
@@ -311,30 +310,30 @@ class DetailsScreen extends StatelessWidget {
                       ),
                       onPressed: () async {
                         double enteredAmount = double.tryParse(amountController.text) ?? 0.0;
-                        var budget = category?.budgetAmount ?? 0.0;
+                        var budget = category.budgetAmount ?? 0.0;
                         if (enteredAmount == 0) {
                           Get.snackbar('Error', 'Please enter amount');
-                        } else if (dateController.text.isEmpty) {
+                        } else if (categoryController.dateController.text.isEmpty) {
                           Get.snackbar('Error', 'Please select date');
                         } else if (budget == 0) {
                           Get.snackbar('Error', 'Please enter budget');
                         } else if (enteredAmount >= budget) {
                           Get.snackbar('Error', 'Spent amount is greater than budget');
                         } else {
-                          //add Transaction on save button callback
                           var transact = Transaction(
                             currentSpentAmount: enteredAmount,
                             description: descriptionController.text,
-                            date: dateController.text,
-                            transactionId: DateTime.now().toIso8601String().toString(),
+                            date: categoryController.dateController.text,
+                            transactionId: DateTime.now().millisecondsSinceEpoch.toString(),
                             categoryId: id,
                           );
                           await transactionController.updateTransaction(transact.transactionId!, transact);
+                          categoryController.getCategoryWithTotal(category);
 
                           Get.snackbar('Success', "Your spent is saved");
                           amountController.clear();
                           descriptionController.clear();
-                          dateController.clear();
+                          categoryController.dateController.clear();
                         }
                       },
                       child: Text(
@@ -350,21 +349,5 @@ class DetailsScreen extends StatelessWidget {
               ),
             ),
     );
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      initialDate: categoryController.selectedDate ?? DateTime.now(),
-      context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null && picked != categoryController.selectedDate) {
-      final formattedDate = DateFormat("dd-MM-yyyy").format(picked);
-      dateController.text = formattedDate;
-      categoryController.selectedDate = picked;
-      var categoryDate = categoryController.categoryList.firstWhereOrNull((cat) => cat.id == id);
-      categoryDate?.date = picked.toString();
-    }
   }
 }
