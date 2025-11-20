@@ -1,5 +1,6 @@
 import 'package:finly/controller/CategoryController.dart';
 import 'package:finly/data/IconList.dart';
+import 'package:finly/model/categoryModel/Category.dart';
 import 'package:finly/ui/AddCategoryScreen.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   CategoryController categoryController = Get.put(CategoryController());
   IconList iconList = IconList();
+  Category category = Category(id: '', iconPoints: 0, fontFamily: '', iconFontPackage: '');
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +62,8 @@ class HomeScreen extends StatelessWidget {
                             onTap: () {
                               Get.to(
                                 DetailsScreen(
-                                  categoryName: categoryController.categoryList
-                                          .elementAt(index)
-                                          .categoryName ??
-                                      'No Name',
-                                  id: categoryController.categoryList
-                                      .elementAt(index)
-                                      .id,
+                                  categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
+                                  id: categoryController.categoryList.elementAt(index).id,
                                 ),
                               );
                             },
@@ -88,9 +85,7 @@ class HomeScreen extends StatelessWidget {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Icon(
-                                              categoryController.categoryList
-                                                  .elementAt(index)
-                                                  .getIconData(),
+                                              categoryController.categoryList.elementAt(index).getIconData(),
                                             ),
                                           ),
                                         ),
@@ -98,8 +93,7 @@ class HomeScreen extends StatelessWidget {
                                           flex: 1,
                                         ),
                                         PopupMenuButton(
-                                          itemBuilder: (BuildContext context) =>
-                                              <PopupMenuEntry<CategoryMenu>>[
+                                          itemBuilder: (BuildContext context) => <PopupMenuEntry<CategoryMenu>>[
                                             PopupMenuItem(
                                               child: Text(
                                                 'Edit',
@@ -110,11 +104,7 @@ class HomeScreen extends StatelessWidget {
                                               ),
                                               onTap: () {
                                                 Get.to(
-                                                  AddCategory(
-                                                      // category: categoryController.categoryHive.getCategoryById(
-                                                      //   categoryController.categoryList.elementAt(index).id!,
-                                                      // ),
-                                                      ),
+                                                  editCategory(context, category)
                                                 );
                                               },
                                             ),
@@ -127,8 +117,7 @@ class HomeScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               onTap: () async {
-                                                await categoryController
-                                                    .removeCategory(index);
+                                                await categoryController.removeCategory(index);
                                               },
                                             )
                                           ],
@@ -139,10 +128,7 @@ class HomeScreen extends StatelessWidget {
                                       height: 4,
                                     ),
                                     Text(
-                                      categoryController.categoryList
-                                              .elementAt(index)
-                                              .categoryName ??
-                                          '',
+                                      categoryController.categoryList.elementAt(index).categoryName ?? '',
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
@@ -161,6 +147,126 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> editCategory(BuildContext context, Category cat) async {
+    TextEditingController categoryNameController = TextEditingController(text: cat.categoryName);
+    TextEditingController budgetController = TextEditingController(text: cat.budgetAmount.toString());
+    IconData selectedIcon = IconData(cat.iconPoints, fontPackage: cat.iconFontPackage, fontFamily: cat.fontFamily);
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                12,
+              ),
+            ),
+            shadowColor: Colors.grey,
+            elevation: 4,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(
+                    'Edit Category',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    controller: categoryNameController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            12,
+                          ),
+                        ),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            12,
+                          ),
+                        ),
+                        borderSide: BorderSide.none,
+                      ),
+                      label: Text('Category Name'),
+                      hintText: 'Enter category name',
+                      fillColor: Colors.grey[300],
+                      filled: true,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  TextField(
+                    controller: budgetController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            12,
+                          ),
+                        ),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            12,
+                          ),
+                        ),
+                        borderSide: BorderSide.none,
+                      ),
+                      label: Text('Monthly Budget'),
+                      hintText: 'Enter your monthly budget',
+                      fillColor: Colors.grey[300],
+                      filled: true,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.height,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurple,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {},
+                      child: Text(
+                        'Save',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 
