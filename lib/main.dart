@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/home",
       routes: {
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => HomeScreen(id: '',),
         '/details': (context) => DetailsScreen(
               categoryName: '',
               id: '',

@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:finly/controller/CategoryController.dart';
 import 'package:finly/data/IconList.dart';
 import 'package:finly/model/categoryModel/Category.dart';
+import 'package:finly/ui/HomeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -228,7 +229,7 @@ class AddCategory extends StatelessWidget {
                       iconFontPackage: selectedIcon!.fontPackage!,
                     );
                     await categoryController.addCategory(category);
-                    Get.back();
+                    Get.offAll(HomeScreen(id: category.id));
                     Get.snackbar("Success", "Category has been added");
                     nameController.clear();
                     budgetController.clear();
