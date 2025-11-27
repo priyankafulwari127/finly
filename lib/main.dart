@@ -1,6 +1,7 @@
 import 'package:finly/model/categoryModel/Category.dart';
 import 'package:finly/model/transactionModel/Transaction.dart';
 import 'package:finly/ui/AddCategoryScreen.dart';
+import 'package:finly/ui/AddIncome.dart';
 import 'package:finly/ui/DetailsScreen.dart';
 import 'package:finly/ui/HomeScreen.dart';
 import 'package:finly/ui/TransactionHistory.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
               date: '',
               categoryId: '',
             ),
+        '/addIncome' : (context) => AddIncome(),
       },
     );
   }

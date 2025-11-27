@@ -1,4 +1,5 @@
 import 'package:finly/controller/CategoryController.dart';
+import 'package:finly/controller/IncomeController.dart';
 import 'package:finly/controller/TransactionController.dart';
 import 'package:finly/data/IconList.dart';
 import 'package:finly/model/categoryModel/Category.dart';
@@ -13,6 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   CategoryController categoryController = Get.put(CategoryController());
   TransactionController transactionController = Get.put(TransactionController());
+  IncomeController incomeController = Get.put(IncomeController());
   IconList iconList = IconList();
   Category category = Category(id: '', iconPoints: 0, fontFamily: '', iconFontPackage: '');
 
@@ -31,15 +33,88 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
       ),
-      floatingActionButton: FloatingActionButton(
-        foregroundColor: Colors.deepPurple,
-        backgroundColor: Colors.deepPurple,
-        onPressed: () {
-          Get.toNamed('/addCategory');
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
+      drawer: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 24.0, top: 45, bottom: 45, right: 24),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.monetization_on_rounded,
+                      size: 28,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'Finly',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 40,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/addCategory');
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.add,
+                        size: 24,
+                        color: Colors.grey[700],
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        'Add Category',
+                        style: TextStyle(fontSize: 18, color: Colors.grey[700], fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  height: 40,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed('/addIncome');
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.add,
+                        size: 24,
+                        color: Colors.grey[700],
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        'Add Income',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
       body: Padding(
@@ -71,7 +146,31 @@ class HomeScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 30,),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 5),
+                            child: Text(
+                              'Monthly Income',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Obx(() {
+                            return Text(
+                              incomeController.income.value.toString(),
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          }),
+                          SizedBox(
+                            height: 30,
+                          ),
                           Expanded(
                             child: GridView.builder(
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
