@@ -14,10 +14,7 @@ class TransactionController extends GetxController{
   void onInit() {
     super.onInit();
     transactionList.value = transactionHive.getAllTransactions();
-    // getTotalAmountOfAllCategory(transactionList);
-    for(var transaction in transactionList){
-      totalExpanse += transaction.currentSpentAmount;
-    }
+    getTotalAmountOfAllCategory(transactionList);
   }
 
   Future<void> updateTransaction(String transactionId, Transaction transaction)async{
@@ -26,7 +23,6 @@ class TransactionController extends GetxController{
   }
 
   double getTotalAmountOfAllCategory(List<Transaction> transactionList){
-    var totalExpanse = 0.0;
     for(var transaction in transactionList){
       return totalExpanse += transaction.currentSpentAmount;
     }
