@@ -18,6 +18,7 @@ class IncomeController extends GetxController{
 
   Future<void> getIncome()async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.getDouble('income');
+    var savedValue = sharedPreferences.getDouble('income') ?? 0.0;
+    income.value = savedValue;
   }
 }

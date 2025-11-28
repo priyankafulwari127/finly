@@ -161,7 +161,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Obx(() {
                             return Text(
-                              incomeController.income.value.toString(),
+                              '${incomeController.income.value}',
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
