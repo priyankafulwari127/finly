@@ -13,12 +13,10 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key, required this.id});
 
   CategoryController categoryController = Get.put(CategoryController());
-  TransactionController transactionController =
-      Get.put(TransactionController());
+  TransactionController transactionController = Get.put(TransactionController());
   IncomeController incomeController = Get.put(IncomeController());
   IconList iconList = IconList();
-  Category category =
-      Category(id: '', iconPoints: 0, fontFamily: '', iconFontPackage: '');
+  Category category = Category(id: '', iconPoints: 0, fontFamily: '', iconFontPackage: '');
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +35,7 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: Drawer(
         child: Padding(
-          padding:
-              const EdgeInsets.only(left: 24.0, top: 45, bottom: 45, right: 24),
+          padding: const EdgeInsets.only(left: 24.0, top: 45, bottom: 45, right: 24),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,10 +79,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       Text(
                         'Add Category',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 18, color: Colors.grey[700], fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -125,61 +119,62 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: categoryController.isLoading.value
-              ? Center(child: CircularProgressIndicator())
-              : categoryController.categoryList.isEmpty
-                  ? Center(
-                      child: Text('No Category Found'),
-                    )
-                  : Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 5),
-                          child: Text(
-                            'Monthly Income',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Obx(() {
-                          return Text(
-                            '${incomeController.income.value}',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        }),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 5),
-                          child: Text(
-                            'Monthly Expense',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '${transactionController.totalExpanse}',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Obx(() {
-                          return Expanded(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 5),
+                child: Text(
+                  'Monthly Income',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Obx(() {
+                return Text(
+                  '${incomeController.income.value}',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }),
+              SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 5),
+                child: Text(
+                  'Monthly Expense',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Obx(() {
+                return Text(
+                  '${transactionController.monthlyTotalExpanse.value}',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }),
+              SizedBox(
+                height: 30,
+              ),
+              Obx(() {
+                return categoryController.isLoading.value
+                    ? Center(child: CircularProgressIndicator())
+                    : categoryController.categoryList.isEmpty
+                        ? Center(
+                            child: Text('No Category Found'),
+                          )
+                        : Expanded(
                             child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 8,
                                 mainAxisSpacing: 8,
@@ -191,14 +186,8 @@ class HomeScreen extends StatelessWidget {
                                   onTap: () {
                                     Get.to(
                                       DetailsScreen(
-                                        categoryName: categoryController
-                                                .categoryList
-                                                .elementAt(index)
-                                                .categoryName ??
-                                            'No Name',
-                                        id: categoryController.categoryList
-                                            .elementAt(index)
-                                            .id,
+                                        categoryName: categoryController.categoryList.elementAt(index).categoryName ?? 'No Name',
+                                        id: categoryController.categoryList.elementAt(index).id,
                                       ),
                                     );
                                   },
@@ -210,8 +199,7 @@ class HomeScreen extends StatelessWidget {
                                     child: Padding(
                                       padding: const EdgeInsets.all(12.0),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
@@ -219,13 +207,9 @@ class HomeScreen extends StatelessWidget {
                                                 elevation: 2,
                                                 color: Colors.grey[350],
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
+                                                  padding: const EdgeInsets.all(8.0),
                                                   child: Icon(
-                                                    categoryController
-                                                        .categoryList
-                                                        .elementAt(index)
-                                                        .getIconData(),
+                                                    categoryController.categoryList.elementAt(index).getIconData(),
                                                   ),
                                                 ),
                                               ),
@@ -233,10 +217,7 @@ class HomeScreen extends StatelessWidget {
                                                 flex: 1,
                                               ),
                                               PopupMenuButton(
-                                                itemBuilder:
-                                                    (BuildContext context) =>
-                                                        <PopupMenuEntry<
-                                                            CategoryMenu>>[
+                                                itemBuilder: (BuildContext context) => <PopupMenuEntry<CategoryMenu>>[
                                                   PopupMenuItem(
                                                     child: Text(
                                                       'Edit',
@@ -246,8 +227,7 @@ class HomeScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     onTap: () {
-                                                      editCategory(context,
-                                                          category, id);
+                                                      editCategory(context, category, id);
                                                     },
                                                   ),
                                                   PopupMenuItem(
@@ -259,9 +239,7 @@ class HomeScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     onTap: () async {
-                                                      await categoryController
-                                                          .removeCategory(
-                                                              index);
+                                                      await categoryController.removeCategory(index);
                                                     },
                                                   )
                                                 ],
@@ -272,10 +250,7 @@ class HomeScreen extends StatelessWidget {
                                             height: 4,
                                           ),
                                           Text(
-                                            categoryController.categoryList
-                                                    .elementAt(index)
-                                                    .categoryName ??
-                                                '',
+                                            categoryController.categoryList.elementAt(index).categoryName ?? '',
                                             textAlign: TextAlign.left,
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
@@ -291,18 +266,15 @@ class HomeScreen extends StatelessWidget {
                               },
                             ),
                           );
-                        }),
-                      ],
-                    )),
+              }),
+            ],
+          )),
     );
   }
 
-  Future<void> editCategory(
-      BuildContext context, Category cat, String catId) async {
-    TextEditingController categoryNameController =
-        TextEditingController(text: cat.categoryName);
-    TextEditingController budgetController =
-        TextEditingController(text: cat.budgetAmount.toString());
+  Future<void> editCategory(BuildContext context, Category cat, String catId) async {
+    TextEditingController categoryNameController = TextEditingController(text: cat.categoryName);
+    TextEditingController budgetController = TextEditingController(text: cat.budgetAmount.toString());
     // IconData selectedIcon = IconData(cat.iconPoints, fontPackage: cat.iconFontPackage, fontFamily: cat.fontFamily);
 
     showDialog(
@@ -405,8 +377,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () async {
-                          double budgetAmount =
-                              double.tryParse(budgetController.text) ?? 0.0;
+                          double budgetAmount = double.tryParse(budgetController.text) ?? 0.0;
                           var updatedCategory = Category(
                             id: id,
                             iconPoints: cat.iconPoints,
@@ -415,11 +386,9 @@ class HomeScreen extends StatelessWidget {
                             categoryName: categoryNameController.text,
                             budgetAmount: budgetAmount,
                           );
-                          await categoryController
-                              .updateCategory(updatedCategory);
+                          await categoryController.updateCategory(updatedCategory);
                           Get.back();
-                          Get.snackbar(
-                              'Success', 'Category updated successfully');
+                          Get.snackbar('Success', 'Category updated successfully');
                         },
                         child: Text(
                           'Save',

@@ -86,7 +86,7 @@ class TransactionHistory extends StatelessWidget {
                                 height: 2,
                               ),
                               Text(
-                                transactions.elementAt(index).date,
+                                '${transactions.elementAt(index).date}',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,

@@ -1,10 +1,8 @@
 import 'package:finly/controller/TransactionController.dart';
-import 'package:finly/model/categoryModel/Category.dart';
 import 'package:finly/model/transactionModel/Transaction.dart';
 import 'package:finly/ui/TransactionHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../controller/CategoryController.dart';
 
