@@ -31,7 +31,7 @@ class TransactionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var transactions = transactionController.transactionHive.getTransactionsByCategory(categoryId);
+    var transactions = transactionController.monthlyTransactionList;
 
     return Scaffold(
       appBar: AppBar(
@@ -62,68 +62,106 @@ class TransactionHistory extends StatelessWidget {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${DateFormat.MMMM().format(DateTime.now())}, ${DateFormat.y().format(DateTime.now())}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
+                  Obx(() {
+                    return Row(
+                      children: [
+                        Text(
+                          '${DateFormat.MMMM().format(transactionController.selectedMonth.value)}, ${DateFormat.y().format(DateTime.now())}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            transactionController.changeMonth(
+                              DateTime(transactionController.selectedMonth.value.year, transactionController.selectedMonth.value.month - 1),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 20,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            transactionController.changeMonth(
+                              DateTime(transactionController.selectedMonth.value.year, transactionController.selectedMonth.value.month + 1),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 20,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                   SizedBox(
                     height: 15,
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: transactions.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Obx(
+                     () {
+                        return ListView.builder(
+                          itemCount: transactions.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          transactions.elementAt(index).description,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          transactions.elementAt(index).date,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(
+                                      flex: 1,
+                                    ),
                                     Text(
-                                      transactions.elementAt(index).description,
+                                      transactions.elementAt(index).currentSpentAmount.toString(),
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 16,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Text(
-                                      transactions.elementAt(index).date,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
+                                    )
                                   ],
                                 ),
-                                Spacer(
-                                  flex: 1,
-                                ),
-                                Text(
-                                  transactions.elementAt(index).currentSpentAmount.toString(),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         );
-                      },
+                      }
                     ),
                   ),
                 ],

@@ -1,3 +1,4 @@
+import 'package:finly/controller/TransactionController.dart';
 import 'package:finly/model/categoryModel/Category.dart';
 import 'package:finly/model/transactionModel/Transaction.dart';
 import 'package:finly/ui/AddCategoryScreen.dart';
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(TransactionController());
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

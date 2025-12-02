@@ -325,7 +325,7 @@ class DetailsScreen extends StatelessWidget {
                             transactionId: DateTime.now().millisecondsSinceEpoch.toString(),
                             categoryId: id,
                           );
-                          await transactionController.updateTransaction(transact.transactionId!, transact);
+                          await transactionController.addTransaction(transact);
                           categoryController.getCategoryWithTotal(category);
 
                           Get.snackbar('Success', "Your spent is saved");

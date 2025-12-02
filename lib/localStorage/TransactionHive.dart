@@ -6,8 +6,8 @@ import '../model/transactionModel/Transaction.dart';
 class TransactionHive {
   Box<Transaction> transactionBox = Hive.box<Transaction>('transaction');
 
-  Future<void> updateTransaction(String transactionId, Transaction transaction) async {
-    transactionBox.put(transactionId, transaction);
+  Future<void> addTransaction(Transaction transaction) async {
+    transactionBox.add(transaction);
   }
 
   List<Transaction> getTransactionsByCategory(String categoryId) {
