@@ -31,8 +31,6 @@ class TransactionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var transactions = transactionController.monthlyTransactionList;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -57,115 +55,114 @@ class TransactionHistory extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: transactions.isEmpty
-            ? Text("No Transactions Found")
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Obx(() {
+              return Row(
                 children: [
-                  Obx(() {
-                    return Row(
-                      children: [
-                        Text(
-                          '${DateFormat.MMMM().format(transactionController.selectedMonth.value)}, ${DateFormat.y().format(DateTime.now())}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            transactionController.changeMonth(
-                              DateTime(transactionController.selectedMonth.value.year, transactionController.selectedMonth.value.month - 1),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: 20,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            transactionController.changeMonth(
-                              DateTime(transactionController.selectedMonth.value.year, transactionController.selectedMonth.value.month + 1),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            size: 20,
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
-                  SizedBox(
-                    height: 15,
+                  Text(
+                    '${DateFormat.MMMM().format(transactionController.selectedMonth.value)}, ${transactionController.selectedMonth.value.year}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
-                  Expanded(
-                    child: Obx(
-                     () {
-                        return ListView.builder(
-                          itemCount: transactions.length,
-                          itemBuilder: (context, index) {
-                            return Card(
-                              elevation: 5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          transactions.elementAt(index).description,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          transactions.elementAt(index).date,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer(
-                                      flex: 1,
-                                    ),
-                                    Text(
-                                      transactions.elementAt(index).currentSpentAmount.toString(),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }
+                  Spacer(
+                    flex: 1,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      transactionController.changeMonth(
+                        DateTime(transactionController.selectedMonth.value.year, transactionController.selectedMonth.value.month - 1),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      transactionController.changeMonth(
+                        DateTime(transactionController.selectedMonth.value.year, transactionController.selectedMonth.value.month + 1),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 20,
                     ),
                   ),
                 ],
-              ),
+              );
+            }),
+            SizedBox(
+              height: 15,
+            ),
+            Expanded(
+              child: Obx(() {
+                var transactions = transactionController.filterTransactionListMonthly(transactionController.selectedMonth.value, catId: categoryId);
+                return transactions.isEmpty
+                    ? Text("No Transaction found")
+                    : ListView.builder(
+                        itemCount: transactions.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        transactions.elementAt(index).description,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text(
+                                        transactions.elementAt(index).date,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(
+                                    flex: 1,
+                                  ),
+                                  Text(
+                                    transactions.elementAt(index).currentSpentAmount.toString(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }

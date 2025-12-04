@@ -14,16 +14,6 @@ class TransactionHive {
     return transactionBox.values.where((transaction) => transaction.categoryId == categoryId).toList();
   }
 
-  double getTotalByCategory(String categoryId) {
-    var expanse = 0.0;
-    for (var t in transactionBox.values) {
-      if(t.categoryId==categoryId) {
-        expanse += t.currentSpentAmount;
-      }
-    }
-    return expanse;
-  }
-
   List<Transaction> getAllTransactions() {
     return transactionBox.values.toList();
   }

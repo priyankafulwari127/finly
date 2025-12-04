@@ -1,3 +1,4 @@
+import 'package:finly/controller/TransactionController.dart';
 import 'package:finly/localStorage/CategoryHive.dart';
 import 'package:finly/localStorage/TransactionHive.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,11 +11,10 @@ import '../model/categoryModel/Category.dart';
 class CategoryController extends GetxController {
   CategoryHive categoryHive = CategoryHive();
   TransactionHive transactionHive = TransactionHive();
-
   TextEditingController dateController = Get.put(TextEditingController());
 
+  TransactionController transactionController = Get.put(TransactionController());
   var categoryList = <Category>[].obs;
-
   var selectedDate = Rxn<DateTime>();
   var isLoading = false.obs;
 
@@ -34,7 +34,7 @@ class CategoryController extends GetxController {
   }
 
   Category getCategoryWithTotal(Category c) {
-    c.totalAmount = transactionHive.getTotalByCategory(c.id);
+    c.totalAmount = transactionController.getTotalByCategory(c.id);
     return c;
   }
 
